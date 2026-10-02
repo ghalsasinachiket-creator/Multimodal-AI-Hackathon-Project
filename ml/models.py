@@ -32,7 +32,7 @@ def make_model(name:str, seed:int = C.SEED):
     if name == "xgb":
         return XGBClassifier(
             n_estimators = 300, max_depth = 3, #Shallow trees:small dataset
-            learning_rate = 0.05, subsample = 0.8, cosample_bytree = 0.8,
+            learning_rate = 0.05, subsample = 0.8, colsample_bytree = 0.8,
             reg_lambda = 1.0, eval_metric = "logloss",
             n_jobs = 1, random_state = seed,
 

@@ -38,7 +38,7 @@ def evaluate(X,Y,meta,models,folds=5,repeats=3, seed = C.SEED) ->pd.DataFrame:
                 })
 
             #}
-        return pd.DataFrame(rows)
+    return pd.DataFrame(rows)
 
 def format_table(results:pd.DataFrame, metric:str) -> pd.DataFrame:
    """Build a models x targets table of 'mean±std' strings for one metric (for printing)."""
