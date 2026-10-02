@@ -1,0 +1,45 @@
+{
+  "source_file": "/home/nachiket/Downloads/cad-risk-3d-day1/cad-risk-3d/data/raw/extention of Z-Alizadeh sani dataset.xlsx",
+  "n_rows": 303,
+  "n_features": 54,
+  "feature_kinds": {
+    "binary": 29,
+    "numeric": 23,
+    "categorical": 2
+  },
+  "rows_dropped_missing_target": 0,
+  "duplicate_rows": 0,
+  "constant_columns_dropped": [
+    "exertional_cp"
+  ],
+  "cad_label_source_column": "cath",
+  "excluded_from_features": [
+    "cath",
+    "lad",
+    "lcx",
+    "rca"
+  ],
+  "class_balance": {
+    "cad": {
+      "positives": 216,
+      "negatives": 87,
+      "prevalence": 0.7129
+    },
+    "lad": {
+      "positives": 177,
+      "negatives": 126,
+      "prevalence": 0.5842
+    },
+    "lcx": {
+      "positives": 119,
+      "negatives": 184,
+      "prevalence": 0.3927
+    },
+    "rca": {
+      "positives": 114,
+      "negatives": 189,
+      "prevalence": 0.3762
+    }
+  },
+  "columns_with_missing": {}
+}

@@ -1,0 +1,543 @@
+{
+  "age": {
+    "kind": "numeric",
+    "min": 30.0,
+    "max": 86.0,
+    "median": 58.0,
+    "mean": 58.897689768976896,
+    "std": 10.39227750453444,
+    "n_missing": 0,
+    "original_name": "Age"
+  },
+  "weight": {
+    "kind": "numeric",
+    "min": 48.0,
+    "max": 120.0,
+    "median": 74.0,
+    "mean": 73.83168316831683,
+    "std": 11.987357556913805,
+    "n_missing": 0,
+    "original_name": "Weight"
+  },
+  "length": {
+    "kind": "numeric",
+    "min": 140.0,
+    "max": 188.0,
+    "median": 165.0,
+    "mean": 164.7161716171617,
+    "std": 9.327661411852311,
+    "n_missing": 0,
+    "original_name": "Length"
+  },
+  "sex": {
+    "kind": "binary",
+    "mapping": {
+      "Fmale": 0,
+      "Male": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Sex"
+  },
+  "bmi": {
+    "kind": "numeric",
+    "min": 18.115412710007302,
+    "max": 40.90065778377467,
+    "median": 26.775510204081634,
+    "mean": 27.248338858149047,
+    "std": 4.098865084776586,
+    "n_missing": 0,
+    "original_name": "BMI"
+  },
+  "dm": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "DM"
+  },
+  "htn": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "HTN"
+  },
+  "current_smoker": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "Current Smoker"
+  },
+  "ex_smoker": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "EX-Smoker"
+  },
+  "fh": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "FH"
+  },
+  "obesity": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Obesity"
+  },
+  "crf": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "CRF"
+  },
+  "cva": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "CVA"
+  },
+  "airway_disease": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Airway disease"
+  },
+  "thyroid_disease": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Thyroid Disease"
+  },
+  "chf": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "CHF"
+  },
+  "dlp": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "DLP"
+  },
+  "bp": {
+    "kind": "numeric",
+    "min": 90.0,
+    "max": 190.0,
+    "median": 130.0,
+    "mean": 129.55445544554456,
+    "std": 18.938105135143886,
+    "n_missing": 0,
+    "original_name": "BP"
+  },
+  "pr": {
+    "kind": "numeric",
+    "min": 50.0,
+    "max": 110.0,
+    "median": 70.0,
+    "mean": 75.14191419141915,
+    "std": 8.91180066124266,
+    "n_missing": 0,
+    "original_name": "PR"
+  },
+  "edema": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "Edema"
+  },
+  "weak_peripheral_pulse": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Weak Peripheral Pulse"
+  },
+  "lung_rales": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Lung rales"
+  },
+  "systolic_murmur": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Systolic Murmur"
+  },
+  "diastolic_murmur": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Diastolic Murmur"
+  },
+  "typical_chest_pain": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "Typical Chest Pain"
+  },
+  "dyspnea": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Dyspnea"
+  },
+  "function_class": {
+    "kind": "numeric",
+    "min": 0.0,
+    "max": 3.0,
+    "median": 0.0,
+    "mean": 0.6633663366336634,
+    "std": 1.0320419005827184,
+    "n_missing": 0,
+    "original_name": "Function Class"
+  },
+  "atypical": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Atypical"
+  },
+  "nonanginal": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Nonanginal"
+  },
+  "lowth_ang": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "LowTH Ang"
+  },
+  "q_wave": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "Q Wave"
+  },
+  "st_elevation": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "St Elevation"
+  },
+  "st_depression": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "St Depression"
+  },
+  "tinversion": {
+    "kind": "binary",
+    "mapping": {
+      "0": 0,
+      "1": 1
+    },
+    "mapping_source": "numeric_order",
+    "n_missing": 0,
+    "original_name": "Tinversion"
+  },
+  "lvh": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "LVH"
+  },
+  "poor_r_progression": {
+    "kind": "binary",
+    "mapping": {
+      "N": 0,
+      "Y": 1
+    },
+    "mapping_source": "token",
+    "n_missing": 0,
+    "original_name": "Poor R Progression"
+  },
+  "bbb": {
+    "kind": "categorical",
+    "categories": [
+      "LBBB",
+      "N",
+      "RBBB"
+    ],
+    "n_missing": 0,
+    "original_name": "BBB"
+  },
+  "fbs": {
+    "kind": "numeric",
+    "min": 62.0,
+    "max": 400.0,
+    "median": 98.0,
+    "mean": 119.18481848184818,
+    "std": 52.07965276703074,
+    "n_missing": 0,
+    "original_name": "FBS"
+  },
+  "cr": {
+    "kind": "numeric",
+    "min": 0.5,
+    "max": 2.2,
+    "median": 1.0,
+    "mean": 1.0556105610561057,
+    "std": 0.264296279451307,
+    "n_missing": 0,
+    "original_name": "CR"
+  },
+  "tg": {
+    "kind": "numeric",
+    "min": 37.0,
+    "max": 1050.0,
+    "median": 122.0,
+    "mean": 150.34323432343234,
+    "std": 97.95945072085185,
+    "n_missing": 0,
+    "original_name": "TG"
+  },
+  "ldl": {
+    "kind": "numeric",
+    "min": 18.0,
+    "max": 232.0,
+    "median": 100.0,
+    "mean": 104.64356435643565,
+    "std": 35.39668788292359,
+    "n_missing": 0,
+    "original_name": "LDL"
+  },
+  "hdl": {
+    "kind": "numeric",
+    "min": 15.9,
+    "max": 111.0,
+    "median": 39.0,
+    "mean": 40.23399339933993,
+    "std": 10.55907692571349,
+    "n_missing": 0,
+    "original_name": "HDL"
+  },
+  "bun": {
+    "kind": "numeric",
+    "min": 6.0,
+    "max": 52.0,
+    "median": 16.0,
+    "mean": 17.501650165016503,
+    "std": 6.956760772568413,
+    "n_missing": 0,
+    "original_name": "BUN"
+  },
+  "esr": {
+    "kind": "numeric",
+    "min": 1.0,
+    "max": 90.0,
+    "median": 15.0,
+    "mean": 19.462046204620464,
+    "std": 15.936475044964782,
+    "n_missing": 0,
+    "original_name": "ESR"
+  },
+  "hb": {
+    "kind": "numeric",
+    "min": 8.9,
+    "max": 17.6,
+    "median": 13.2,
+    "mean": 13.153465346534654,
+    "std": 1.6104520583998867,
+    "n_missing": 0,
+    "original_name": "HB"
+  },
+  "k": {
+    "kind": "numeric",
+    "min": 3.0,
+    "max": 6.6,
+    "median": 4.2,
+    "mean": 4.230693069306931,
+    "std": 0.4582017632143438,
+    "n_missing": 0,
+    "original_name": "K"
+  },
+  "na": {
+    "kind": "numeric",
+    "min": 128.0,
+    "max": 156.0,
+    "median": 141.0,
+    "mean": 140.996699669967,
+    "std": 3.807885117982797,
+    "n_missing": 0,
+    "original_name": "Na"
+  },
+  "wbc": {
+    "kind": "numeric",
+    "min": 3700.0,
+    "max": 18000.0,
+    "median": 7100.0,
+    "mean": 7562.046204620462,
+    "std": 2413.739323339799,
+    "n_missing": 0,
+    "original_name": "WBC"
+  },
+  "lymph": {
+    "kind": "numeric",
+    "min": 7.0,
+    "max": 60.0,
+    "median": 32.0,
+    "mean": 32.399339933993396,
+    "std": 9.972591556076441,
+    "n_missing": 0,
+    "original_name": "Lymph"
+  },
+  "neut": {
+    "kind": "numeric",
+    "min": 32.0,
+    "max": 89.0,
+    "median": 60.0,
+    "mean": 60.148514851485146,
+    "std": 10.182493226947498,
+    "n_missing": 0,
+    "original_name": "Neut"
+  },
+  "plt": {
+    "kind": "numeric",
+    "min": 25.0,
+    "max": 742.0,
+    "median": 210.0,
+    "mean": 221.4884488448845,
+    "std": 60.79619927480209,
+    "n_missing": 0,
+    "original_name": "PLT"
+  },
+  "ef_tte": {
+    "kind": "numeric",
+    "min": 15.0,
+    "max": 60.0,
+    "median": 50.0,
+    "mean": 47.23102310231023,
+    "std": 8.927194182365653,
+    "n_missing": 0,
+    "original_name": "EF-TTE"
+  },
+  "region_rwma": {
+    "kind": "numeric",
+    "min": 0.0,
+    "max": 4.0,
+    "median": 0.0,
+    "mean": 0.6204620462046204,
+    "std": 1.1325309160780648,
+    "n_missing": 0,
+    "original_name": "Region RWMA"
+  },
+  "vhd": {
+    "kind": "categorical",
+    "categories": [
+      "Moderate",
+      "N",
+      "Severe",
+      "mild"
+    ],
+    "n_missing": 0,
+    "original_name": "VHD"
+  }
+}
