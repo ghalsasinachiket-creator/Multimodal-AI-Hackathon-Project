@@ -11,11 +11,12 @@ from pathlib import Path
 
 
 # Make the project's `ml` package importable when running `python scripts/...`
-sys.path.insert(0, str(Path(__file__).parent.parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import joblib # saves/loads Python objects (our fitted models) to disk
 import pandas as pd
 import numpy as np
 from ml import config as C
+from ml.data import load_processed
 from ml.models import MODEL_NAMES
 from ml.tuning import (bootstrap_auc_ci,fit_final, nested_cv,
                        threshold_metrics, youden_threshold)
