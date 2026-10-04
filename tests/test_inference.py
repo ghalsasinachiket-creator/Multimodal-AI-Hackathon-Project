@@ -99,6 +99,9 @@ def test_api_endpoints(service):
         body = {"features": {"age": 63, "sex": 1, "bp": 140}}
         assert client.post("/predict", json=body).status_code == 200
         assert client.post("/explain?top_k=3", json=body).json()["explanations"]["lad"]["top_features"][2]
+        # only fields we actually sent may appear when entered_only is on
+        r = client.post("/explain?top_k=50&entered_only=true", json=body).json()
+        assert {i["feature"] for i in r["explanations"]["lad"]["top_features"]} <= {"age", "sex", "bp"}
         assert client.post("/predict", json={"features": {"sex": 5}}).status_code == 422
         assert client.get("/metrics").status_code == 404         # no reports in the temp folder yet
         service.report_dir.mkdir()
