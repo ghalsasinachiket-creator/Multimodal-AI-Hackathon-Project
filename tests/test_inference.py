@@ -68,6 +68,14 @@ def test_explain_shares(service):
     assert age["value"] == 60 and not age["was_filled"]
 
 
+def test_entered_hides_assumed_values(service):
+    r = service.explain({"age":60,"bp":140}, top_k = 100, entered_only = True)
+    for e in r["explanations"].values():
+        assert {i["feature"] for i in e["top_features"]} <= {"age", "bp"}
+        #entered shares + assumed shares must still add up to 100%
+        assert abs(sum(i["share_pct"] for i in e["top_features"]) + e["assumed_share_pct"] - 100) < 1.0
+
+
 def test_validation(service):
     with pytest.raises(ValueError):
         service.to_frame({"not_a_feature": 1})
