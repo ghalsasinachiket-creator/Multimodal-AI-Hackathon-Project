@@ -3,28 +3,30 @@
     python scripts/train_final.py            # full run (several minutes)
     python scripts/train_final.py --quick    # 1 outer repeat instead of 2 (about half the time)
 """
-
 import argparse
 import json
 import sys
 from pathlib import Path
 
-
 # Make the project's `ml` package importable when running `python scripts/...`
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import joblib # saves/loads Python objects (our fitted models) to disk
-import pandas as pd
+
+import joblib            # saves/loads Python objects (our fitted models) to disk
 import numpy as np
+import pandas as pd
+
 from ml import config as C
 from ml.data import load_processed
 from ml.models import MODEL_NAMES
-from ml.tuning import (bootstrap_auc_ci,fit_final, nested_cv,
+from ml.tuning import (bootstrap_auc_ci, fit_final, nested_cv,
                        threshold_metrics, youden_threshold)
+
 # The dummy model was only a "no skill" floor on Day 2, so it isn't a candidate for shipping.
 CANDIDATES = [m for m in MODEL_NAMES if m != "dummy"]
 
+
 def main() -> None:
-    #Command-line arguements, so the same script serves a quick test or a full run
+    # Command-line options, so the same script serves a quick test or a full run.
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", default=None)
     ap.add_argument("--models", nargs="+", default=CANDIDATES, choices=CANDIDATES)
@@ -34,9 +36,10 @@ def main() -> None:
     args = ap.parse_args()
 
     reports, model_dir = Path(args.reports), Path(args.model_dir)
-    reports.mkdir(parents=True,exist_ok=True) #create the reports/ folder if it doesn't exist
+    reports.mkdir(parents=True, exist_ok=True)     # create the folders if they don't exist yet
     model_dir.mkdir(parents=True, exist_ok=True)
     repeats = 1 if args.quick else 2               # fewer repeats = faster but a noisier estimate
+
     ds = load_processed(args.data_dir)             # X (features), Y (4 target columns), meta
     # rows      -> one summary line per (target, model), becomes nested_cv_results.csv
     # final     -> the chosen model's metrics per target, becomes final_metrics.json
@@ -109,5 +112,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

@@ -1,0 +1,86 @@
+{
+  "cad": {
+    "accuracy": 0.8481848184818482,
+    "precision": 0.9722222222222222,
+    "recall": 0.8101851851851852,
+    "f1": 0.8838383838383839,
+    "roc_auc": 0.917518092805449,
+    "brier": 0.10146182578747047,
+    "threshold": 0.80310406668351,
+    "model": "rf",
+    "calibrated": true,
+    "auc_ci95": [
+      0.8799178043412059,
+      0.9487764987209432
+    ],
+    "nested_auc_mean": 0.9279169948458594,
+    "nested_auc_std": 0.04773703874907448,
+    "best_params": {
+      "clf__max_features": "sqrt",
+      "clf__min_samples_leaf": 1
+    }
+  },
+  "lad": {
+    "accuracy": 0.7986798679867987,
+    "precision": 0.8222222222222222,
+    "recall": 0.8361581920903954,
+    "f1": 0.8291316526610645,
+    "roc_auc": 0.8463366514213971,
+    "brier": 0.15272874243400286,
+    "threshold": 0.569248555599632,
+    "model": "rf",
+    "calibrated": true,
+    "auc_ci95": [
+      0.7998242583034608,
+      0.8893516632666105
+    ],
+    "nested_auc_mean": 0.8575780219780219,
+    "nested_auc_std": 0.060524465526678124,
+    "best_params": {
+      "clf__max_features": "sqrt",
+      "clf__min_samples_leaf": 3
+    }
+  },
+  "lcx": {
+    "accuracy": 0.7095709570957096,
+    "precision": 0.6201550387596899,
+    "recall": 0.6722689075630253,
+    "f1": 0.6451612903225806,
+    "roc_auc": 0.7376233101936427,
+    "brier": 0.20513709516987208,
+    "threshold": 0.40689507198281705,
+    "model": "xgb",
+    "calibrated": true,
+    "auc_ci95": [
+      0.6779767345492669,
+      0.7897097748457983
+    ],
+    "nested_auc_mean": 0.7274260673717194,
+    "nested_auc_std": 0.07464951245207783,
+    "best_params": {
+      "clf__max_depth": 2,
+      "clf__n_estimators": 300
+    }
+  },
+  "rca": {
+    "accuracy": 0.6864686468646864,
+    "precision": 0.5748031496062992,
+    "recall": 0.6403508771929824,
+    "f1": 0.6058091286307054,
+    "roc_auc": 0.7119650979300102,
+    "brier": 0.20619609914053716,
+    "threshold": 0.4077896755176001,
+    "model": "rf",
+    "calibrated": true,
+    "auc_ci95": [
+      0.6530342966398436,
+      0.7680326588892905
+    ],
+    "nested_auc_mean": 0.7179608566336256,
+    "nested_auc_std": 0.060411017606312484,
+    "best_params": {
+      "clf__max_features": "sqrt",
+      "clf__min_samples_leaf": 5
+    }
+  }
+}
