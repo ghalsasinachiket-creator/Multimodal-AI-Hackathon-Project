@@ -174,7 +174,7 @@ class RiskService:
         base_value = float(ev[1] if len(ev) > 1 else ev[0])
         return sv[0], base_value                           # [0] = the single patient in the batch
 
-    def explain(self, values: dict, top_k: int = 10) -> dict:
+    def explain(self, values: dict, top_k: int = 10, entered_only:bool = False) -> dict:
         X, warnings, filled = self.to_frame(values)
         filled_set = set(filled)
         out = {}
@@ -194,7 +194,13 @@ class RiskService:
 
             # share_pct = this feature's |push| as a percentage of all |pushes|, so shares sum to 100.
             total = sum(abs(v) for v in per_feature.values()) or 1.0      # "or 1.0" avoids dividing by zero
+            #ranked = sorted(per_feature.items(), key=lambda kv: abs(kv[1]), reverse=True)
+            # Share of the total push that came from fields the user did NOT enter (assumed typical values).
+            assumed = sum(abs(v) for c, v in per_feature.items() if c in filled_set)
             ranked = sorted(per_feature.items(), key=lambda kv: abs(kv[1]), reverse=True)
+            if entered_only:     # hide assumed values from the list; shares stay relative to the full total
+                ranked = [(c, v) for c, v in ranked if c not in filled_set]
+
 
             items = [{
                 "feature": col,
@@ -212,6 +218,7 @@ class RiskService:
                 "base_value": round(base_value, 4),
                 "top_features": items,
                 "other_share_pct": round(100 * rest / total, 1),
+                "assumed_share_pct": round(100 * assumed / total, 1),
             }
         return {
             "explanations": out,
