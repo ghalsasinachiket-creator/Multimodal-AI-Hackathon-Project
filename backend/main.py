@@ -61,10 +61,10 @@ def create_app(service: RiskService | None = None) -> FastAPI:
             raise HTTPException(status_code=422, detail=str(e))
 
     @app.post("/explain")
-    def explain(body: PatientInput, request: Request, top_k: int = 10):
+    def explain(body: PatientInput, request: Request, top_k: int = 10, entered_only: bool = False):
         # top_k = how many features to list per target, e.g. POST /explain?top_k=5
         try:
-            return svc(request).explain(body.features, top_k=top_k)
+            return svc(request).explain(body.features, top_k=top_k, entered_only=entered_only)
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e))
 
