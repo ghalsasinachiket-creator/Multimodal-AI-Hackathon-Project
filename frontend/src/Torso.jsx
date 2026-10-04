@@ -12,9 +12,11 @@ function Shell({ centre, radii, color, opacity }) {
 export default function Torso() {
   return (
     <group>
-      <Shell centre={[0, -0.1, -0.05]} radii={[1.25, 1.7, 0.78]} color="#9db4c8" opacity={0.1} />
-      <Shell centre={[-0.85, 0.1, -0.05]} radii={[0.5, 0.85, 0.42]} color="#d9a0a8" opacity={0.14} />
-      <Shell centre={[0.85, 0.1, -0.05]} radii={[0.46, 0.82, 0.4]} color="#d9a0a8" opacity={0.14} />
+      {/* wider torso so the lungs fit inside it */}
+      <Shell centre={[0, -0.1, -0.05]} radii={[1.45, 1.7, 0.8]} color="#9db4c8" opacity={0.08} />
+      {/* lungs pushed outwards: inner edges at x = ±0.62, clear of the heart (which reaches ±0.55) */}
+      <Shell centre={[-1.0, 0.1, -0.05]} radii={[0.38, 0.8, 0.36]} color="#d9a0a8" opacity={0.1} />
+      <Shell centre={[1.0, 0.1, -0.05]} radii={[0.38, 0.78, 0.34]} color="#d9a0a8" opacity={0.1} />
     </group>
   );
 }
