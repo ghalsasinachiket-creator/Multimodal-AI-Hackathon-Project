@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { VESSELS, buildArteryCurve } from "./anatomy.js";
-import { riskColor } from "./riskColor.js";
+import { NEUTRAL_COLOR,riskColor } from "./riskColor.js";
 
 function Artery({ id, vessel, prob, selected, onSelect }) {
   const [hovered, setHovered] = useState(false);
@@ -14,7 +14,8 @@ function Artery({ id, vessel, prob, selected, onSelect }) {
   const labelPosition = useMemo(() => curve.getPoint(0.3), [curve]);
 
   // The colour we want right now, recomputed only when the probability changes.
-  const target = useMemo(() => new THREE.Color(riskColor(prob)), [prob]);
+  //const target = useMemo(() => new THREE.Color(riskColor(prob)), [prob]);
+  const target = useMemo(() => new THREE.Color(prob == null ? NEUTRAL_COLOR : riskColor(prob)), [prob]);
 
   // Every frame, move the current colour 12% of the way towards the target: a smooth fade, not a jump.
   useFrame(() => {

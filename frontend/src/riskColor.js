@@ -5,3 +5,5 @@ export function riskColor(p) {
   const hue = Math.round(120 * (1 - clamped) * 10) / 10;
   return `hsl(${hue}, 75%, 45%)`; // three.js Color() understands this string format
 }
+// Shown instead of a risk colour while there is no prediction yet (no patient data entered).
+export const NEUTRAL_COLOR = "hsl(215, 10%, 52%)";
