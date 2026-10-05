@@ -199,6 +199,8 @@ def build_dataset(path: str | Path | None = None) -> Dataset:
     feats = df.drop(columns=[c for c in df.columns if c in C.LEAKAGE_COLUMNS])
     constant = [c for c in feats.columns if feats[c].dropna().nunique() <= 1]
     feats = feats.drop(columns=constant)
+    excluded = [c for c in C.EXCLUDED_FEATURES if c in feats.columns]   # chosen by the ablation study
+    feats = feats.drop(columns=excluded)
 
     typed, meta = {}, {}
     for col in feats.columns:
@@ -217,6 +219,7 @@ def build_dataset(path: str | Path | None = None) -> Dataset:
         "rows_dropped_missing_target": n_dropped_rows,
         "duplicate_rows": int(pd.concat([X, Y], axis=1).duplicated().sum()),
         "constant_columns_dropped": constant,
+        "manually_excluded_features": excluded,
         "cad_label_source_column": cad_src,
         "excluded_from_features": sorted(C.LEAKAGE_COLUMNS & cols),
         "class_balance": {
