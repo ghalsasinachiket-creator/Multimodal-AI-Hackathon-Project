@@ -36,7 +36,8 @@ export function useRisk() {
       try {
         // the two requests are independent, so run them side by side
         const [p, e] = await Promise.all([predict(payload, controller.signal), explain(payload, controller.signal)]);
-        setResult({ predict: p, explain: e });
+        // keep the previous predictions so the cards can show "+4 points since your last change"
+        setResult((prev) => ({ predict: p, explain: e, previous: prev?.predict.predictions ?? null }));
         setStatus({ loading: false, error: null });
       } catch (err) {
         if (err.name === "AbortError") return;      // a newer request replaced this one: ignore
@@ -53,7 +54,7 @@ export function useRisk() {
     result: hasInput ? result : null,               // nothing entered -> show no prediction
     setField: (name, value) => setTouched((t) => ({ ...t, [name]: value })),
     clearField: (name) => setTouched(({ [name]: _removed, ...rest }) => rest),
-    reset: () => setTouched({}),
-    loadExample: () => setTouched({ ...EXAMPLE_PATIENT }),
+    reset: () => {setTouched({}),setResult(null);},
+    loadExample: () => { setTouched({ ...EXAMPLE_PATIENT }); setResult(null); },
   };
 }
