@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import FeatureForm from "./FeatureForm.jsx";
 import Results from "./Results.jsx";
 import Scene from "./Scene.jsx";
+import ViewControls from "./ViewControls.jsx";
 import { NEUTRAL_COLOR, riskColor } from "./riskColor.js";
 import { useRisk } from "./useRisk.js";
 
@@ -11,6 +12,8 @@ const GRADIENT = `linear-gradient(to right, ${riskColor(0)}, ${riskColor(0.5)}, 
 export default function App() {
   const risk = useRisk();
   const [selected, setSelected] = useState(null); // "cad" | "lad" | "lcx" | "rca" | null
+  const [view, setView] = useState(null);         // { name, nonce }: the latest camera button pressed
+  const [layers, setLayers] = useState({ body: true, labels: true });
 
   // Probabilities for the 3D arteries. null = no prediction yet, so the arteries stay grey.
   const probs = useMemo(() => {
@@ -30,13 +33,15 @@ export default function App() {
         </aside>
 
         <div className="viewer">
-          <Scene probs={probs} selected={selected} onSelect={setSelected} />
+          <Scene probs={probs} selected={selected} onSelect={setSelected} view={view} layers={layers} />
+          <ViewControls layers={layers} onLayers={setLayers}
+                        onView={(name) => setView({ name, nonce: Date.now() })} />
           <div className="legend-overlay">
             <div className="legend" style={{ background: GRADIENT }} />
             <div className="legend-labels"><span>low risk</span><span>high risk</span></div>
             {!risk.result && (
-  <div className="legend-none"><i style={{ background: NEUTRAL_COLOR }} /> no prediction yet</div>
-)}
+              <div className="legend-none"><i style={{ background: NEUTRAL_COLOR }} /> no prediction yet</div>
+            )}
           </div>
         </div>
 
