@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { VESSELS, buildArteryCurve } from "./anatomy.js";
 import { NEUTRAL_COLOR,riskColor } from "./riskColor.js";
 
-function Artery({ id, vessel, prob, selected, onSelect }) {
+function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
   const [hovered, setHovered] = useState(false);
   const material = useRef();
 
@@ -45,18 +45,21 @@ function Artery({ id, vessel, prob, selected, onSelect }) {
         {/* A constant starting colour: the useFrame fade above then animates it to the risk colour. */}
         <meshStandardMaterial ref={material} color="#888888" emissiveIntensity={selected ? 0.6 : 0.12} roughness={0.35} />
       </mesh>
-      <Html position={labelPosition} center distanceFactor={4} style={{ pointerEvents: "none" }}>
-        <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
-      </Html>
+      {showLabels && (
+        <Html position={labelPosition} center distanceFactor={4} style={{ pointerEvents: "none" }}>
+          <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
+        </Html>
+      )}
     </group>
   );
 }
 
-export default function Arteries({ probs, selected, onSelect }) {
+export default function Arteries({ probs, selected, onSelect, showLabels = true }) {
   return (
     <group>
       {Object.entries(VESSELS).map(([id, vessel]) => (
-        <Artery key={id} id={id} vessel={vessel} prob={probs[id]} selected={selected === id} onSelect={onSelect} />
+        <Artery key={id} id={id} vessel={vessel} prob={probs[id]} selected={selected === id}
+                onSelect={onSelect} showLabels={showLabels} />
       ))}
     </group>
   );
