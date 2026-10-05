@@ -58,3 +58,9 @@ def test_processed_roundtrip(raw_csv, tmp_path):
     assert list(again.X.columns) == list(ds.X.columns)
     assert again.Y.shape == ds.Y.shape
     assert again.meta == ds.meta
+
+def test_excluded_features_are_removed_and_reported(raw_csv, monkeypatch):
+    monkeypatch.setattr(C, "EXCLUDED_FEATURES", frozenset({"age", "not_a_column"}))
+    ds = build_dataset(raw_csv)
+    assert "age" not in ds.X.columns and "age" not in ds.meta      # gone from features and metadata
+    assert ds.report["manually_excluded_features"] == ["age"]       # names that don't exist are ignored
