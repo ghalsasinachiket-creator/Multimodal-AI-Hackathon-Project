@@ -9,26 +9,6 @@
     "n_missing": 0,
     "original_name": "Age"
   },
-  "weight": {
-    "kind": "numeric",
-    "min": 48.0,
-    "max": 120.0,
-    "median": 74.0,
-    "mean": 73.83168316831683,
-    "std": 11.987357556913805,
-    "n_missing": 0,
-    "original_name": "Weight"
-  },
-  "length": {
-    "kind": "numeric",
-    "min": 140.0,
-    "max": 188.0,
-    "median": 165.0,
-    "mean": 164.7161716171617,
-    "std": 9.327661411852311,
-    "n_missing": 0,
-    "original_name": "Length"
-  },
   "sex": {
     "kind": "binary",
     "mapping": {
@@ -38,16 +18,6 @@
     "mapping_source": "token",
     "n_missing": 0,
     "original_name": "Sex"
-  },
-  "bmi": {
-    "kind": "numeric",
-    "min": 18.115412710007302,
-    "max": 40.90065778377467,
-    "median": 26.775510204081634,
-    "mean": 27.248338858149047,
-    "std": 4.098865084776586,
-    "n_missing": 0,
-    "original_name": "BMI"
   },
   "dm": {
     "kind": "binary",
