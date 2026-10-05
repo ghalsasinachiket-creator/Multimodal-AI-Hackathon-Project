@@ -106,7 +106,7 @@ export default function Results({ result, status, hasInput, features, metrics, s
       {pred && (
         <>
           <p className="hint">
-            {features.length - pred.n_inputs_filled} of {features.length} fields entered.
+            {features.length - pred.n_inputs_filled} of {features.length} fields used.
             {pred.filled_features.length > 0 && (
               <details className="assumed-list">
                 <summary>Assumed typical values ({pred.filled_features.length})</summary>

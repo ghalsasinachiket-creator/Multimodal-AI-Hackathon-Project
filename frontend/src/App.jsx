@@ -34,7 +34,9 @@ export default function App() {
           <div className="legend-overlay">
             <div className="legend" style={{ background: GRADIENT }} />
             <div className="legend-labels"><span>low risk</span><span>high risk</span></div>
-            <div className="legend-none"><i style={{ background: NEUTRAL_COLOR }} /> no prediction yet</div>
+            {!risk.result && (
+  <div className="legend-none"><i style={{ background: NEUTRAL_COLOR }} /> no prediction yet</div>
+)}
           </div>
         </div>
 

@@ -32,4 +32,4 @@ NEGATIVE_TOKENS = frozenset({
 
 
 # Features deliberately left out of the models (decided by scripts/ablation.py). Empty = use everything.
-EXCLUDED_FEATURES = frozenset({"weight", "length", "bmi"})
+EXCLUDED_FEATURES = frozenset({"weight", "length", "bmi",})
