@@ -1,12 +1,16 @@
 import { formatValue, labelOf } from "./featureGroups.js";
 import { riskColor } from "./riskColor.js";
+import { plainSummary } from "./summary.js";
+
 
 const TARGETS = [["cad", "Overall CAD"], ["lad", "LAD"], ["lcx", "LCX"], ["rca", "RCA"]];
 const pct = (x) => Math.round(x * 100);
 
 // One prediction: probability, a bar with the cut-off marked, and above/below status.
-function RiskCard({ title, pred, selected, onSelect }) {
+// `previous` is the prediction before the user's latest edit (or null), used for the change badge.
+function RiskCard({ title, pred, previous, selected, onSelect }) {
   const p = pred.probability;
+  const delta = previous ? pct(p) - pct(previous.probability) : 0; // change in percentage points
   return (
     <button type="button" className={`card${selected ? " selected" : ""}`} onClick={onSelect}>
       <div className="card-top">
@@ -15,7 +19,14 @@ function RiskCard({ title, pred, selected, onSelect }) {
           {pred.above_threshold ? "Above cut-off" : "Below cut-off"}
         </span>
       </div>
-      <div className="card-prob" style={{ color: riskColor(p) }}>{pct(p)}%</div>
+      <div className="card-prob" style={{ color: riskColor(p) }}>
+        {pct(p)}%
+        {delta !== 0 && (
+          <span className={`delta ${delta > 0 ? "up" : "down"}`} title="change since your last edit">
+            {delta > 0 ? " +" : ""}{delta} pts
+          </span>
+        )}
+      </div>
       <div className="bar">
         <div className="bar-fill" style={{ width: `${pct(p)}%`, background: riskColor(p) }} />
         {/* the tick shows where THIS target's cut-off sits: they differ per target */}
@@ -28,14 +39,16 @@ function RiskCard({ title, pred, selected, onSelect }) {
   );
 }
 
+
 // Why this target got its probability: the entered features, ranked by share of the explanation.
-function Explanation({ title, exp, features }) {
+function Explanation({ title,pred, exp, features }) {
   const byName = new Map(features.map((f) => [f.name, f]));
   const assumed = exp.assumed_share_pct;
   const biggest = Math.max(...exp.top_features.map((f) => f.share_pct), 1); // scales the bars
   return (
     <section className="explain">
       <h2>Why {title}?</h2>
+      <p className="summary">{plainSummary({ title, pred, exp, features })}</p>
       <div className={`assumed${assumed > 50 ? " high" : ""}`}>
         {assumed}% of this estimate rests on values that were not entered
         {assumed > 50 ? ": interpret with caution" : ""}
@@ -55,6 +68,7 @@ function Explanation({ title, exp, features }) {
       <p className="hint">
         ↑ pushes the estimate towards stenosis, ↓ away from it. Bars are each feature's share of the
         model's explanation (SHAP). These are statistical associations, not causes.
+        
       </p>
     </section>
   );
@@ -101,7 +115,12 @@ export default function Results({ result, status, hasInput, features, metrics, s
       {status.error && <div className="error">{status.error}</div>}
       {!hasInput && !status.error && (
         <p className="hint">Enter patient data on the left, or press “Load example”, to see predictions.</p>
+        
       )}
+      {!hasInput && !status.error && (
+        <p className="hint">Enter patient data on the left, or press “Load example”, to see predictions.</p>
+      )}
+      {hasInput && !pred && !status.error && <p className="hint">Calculating…</p>}
 
       {pred && (
         <>
@@ -122,7 +141,8 @@ export default function Results({ result, status, hasInput, features, metrics, s
             ))}
           </div>
           {selected && expl?.explanations[selected] && (
-            <Explanation title={selectedTitle} exp={expl.explanations[selected]} features={features} />
+             <Explanation title={selectedTitle} pred={pred.predictions[selected]}
+                         exp={expl.explanations[selected]} features={features} />
           )}
           {!selected && <p className="hint">Click a card or an artery to see why.</p>}
         </>
