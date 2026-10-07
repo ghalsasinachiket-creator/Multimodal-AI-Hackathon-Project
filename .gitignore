@@ -7,3 +7,5 @@ node_modules/
 # raw data is downloaded by the user; remove this line if you want to commit it
 data/raw/*
 !data/raw/.gitkeep
+models_final/
+reports_final/

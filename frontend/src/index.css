@@ -1,0 +1,93 @@
+/* Three columns: patient form | 3D viewer | results. A banner on top. */
+html, body, #root { height: 100%; margin: 0; }
+body { font-family: system-ui, sans-serif; background: #0f141a; color: #e6edf3; }
+button, input, select { font: inherit; }
+
+.app { display: flex; flex-direction: column; height: 100%; }
+.disclaimer { background: #7a1f1f; color: #fff; padding: 8px 14px; font-size: 14px; font-weight: 600; text-align: center; }
+.main { flex: 1; display: grid; grid-template-columns: 330px minmax(0, 1fr) 380px; min-height: 0; }
+.side { padding: 16px; background: #161d26; overflow-y: auto; }
+.viewer { position: relative; min-width: 0; }
+h1 { font-size: 18px; margin: 0 0 8px; }
+h2 { font-size: 14px; margin: 18px 0 8px; color: #9fb0c0; }
+.hint { font-size: 13px; color: #9fb0c0; line-height: 1.45; }
+.updating { font-size: 12px; font-weight: 400; color: #9fb0c0; margin-left: 8px; }
+
+/* ---- form ---- */
+.form-actions { display: flex; gap: 8px; align-items: center; margin: 10px 0 12px; }
+.form-actions button { background: #243142; color: #e6edf3; border: 1px solid #34465c; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+.form-actions button:disabled { opacity: 0.4; cursor: default; }
+.count { margin-left: auto; font-size: 12px; color: #9fb0c0; }
+details { border-top: 1px solid #243142; padding: 6px 0; }
+summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
+.pill { margin-left: 8px; background: #2f6fed; color: #fff; border-radius: 9px; padding: 0 7px; font-size: 11px; }
+.field { display: grid; grid-template-columns: 1fr 130px; gap: 2px 8px; align-items: center; margin: 6px 0; font-size: 13px; }
+.field small { grid-column: 2; font-size: 11px; color: #7d8d9c; }
+.field .unit { color: #7d8d9c; }
+.field input, .field select { background: #0f141a; color: #e6edf3; border: 1px solid #2b3a4c; border-radius: 5px; padding: 4px 6px; width: 100%; box-sizing: border-box; }
+.field input::placeholder { color: #5f6f7f; }
+.field.entered input, .field.entered select { border-color: #2f6fed; }
+.field input[readOnly] { color: #9fb0c0; }
+
+/* ---- results ---- */
+.cards { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 10px; margin: 10px 0; }
+.card { display: flex; flex-direction: column; text-align: left; background: #1d2733; color: inherit; border: 2px solid transparent; border-radius: 10px; padding: 10px; cursor: pointer; }
+.card.selected { border-color: #fff; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; min-height: 34px; }
+.card-title { font-weight: 600; font-size: 13px; }
+.card-prob { font-size: 28px; font-weight: 700; margin: 4px 0; }
+.card small { color: #7d8d9c; font-size: 11px; margin-top: auto; }
+.badge { font-size: 10px; border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+.badge.up { background: #5b1f1f; color: #ffb4b4; }
+.badge.down { background: #1d4a2b; color: #a9e8bd; }
+.bar { position: relative; height: 8px; background: #0f141a; border-radius: 4px; margin: 4px 0 6px; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-tick { position: absolute; top: -3px; width: 2px; height: 14px; background: #fff; }
+
+.assumed { font-size: 12px; background: #243142; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; }
+.assumed.high { background: #5a4310; color: #ffd98a; }
+.assumed-list { border: 0; padding: 0; font-weight: 400; }
+.assumed-list summary { font-weight: 400; font-size: 12px; color: #9fb0c0; }
+.feat { margin: 7px 0; font-size: 13px; }
+.feat-head { display: flex; justify-content: space-between; gap: 8px; }
+.feat-head .raises { color: #ff9b8f; }
+.feat-head .lowers { color: #8fc8ff; }
+.feat-bar { height: 6px; background: #0f141a; border-radius: 3px; margin-top: 3px; }
+.feat-fill { height: 100%; border-radius: 3px; }
+.feat-fill.raises { background: #ef6a5b; }
+.feat-fill.lowers { background: #5aa9f0; }
+
+.warn { background: #5a4310; color: #ffd98a; border-radius: 6px; padding: 6px 8px; font-size: 12px; margin: 6px 0; }
+.error { background: #5b1f1f; color: #ffb4b4; border-radius: 6px; padding: 8px; font-size: 13px; margin: 6px 0; }
+.metrics table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+.metrics th, .metrics td { text-align: left; padding: 3px 4px; border-bottom: 1px solid #243142; }
+
+/* ---- 3D viewer overlays ---- */
+.legend-overlay { position: absolute; left: 14px; bottom: 14px; width: 190px; font-size: 11px; color: #9fb0c0; pointer-events: none; }
+.legend { height: 8px; border-radius: 4px; }
+.legend-labels { display: flex; justify-content: space-between; margin-top: 3px; }
+.legend-none { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.legend-none i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.vessel-label { padding: 1px 6px; border-radius: 4px; background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.vessel-label.selected { background: #fff; color: #000; }
+
+/* ---- change badge and plain-language summary ---- */
+.delta { margin-left: 8px; font-size: 11px; font-weight: 600; vertical-align: middle; }
+.delta.up { color: #ff9b8f; }
+.delta.down { color: #8fc8ff; }
+.summary { font-size: 13px; line-height: 1.5; background: #1d2733; border-radius: 8px; padding: 8px 10px; margin: 0 0 8px; }
+
+/* ---- camera buttons and layer switches (top-left of the 3D view) ---- */
+.view-controls { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #c4d0dc; }
+.view-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
+.view-controls button { background: rgba(36, 49, 66, 0.9); color: #e6edf3; border: 1px solid #34465c; border-radius: 6px; padding: 4px 9px; cursor: pointer; }
+.view-controls button:hover { border-color: #5b7fa6; }
+.view-controls label { display: flex; align-items: center; gap: 6px; cursor: pointer;}
+
+/* narrow screens: stack the three parts */
+@media (max-width: 1100px) {
+  .app { height: auto; }
+  .main { display: block; }
+  .viewer { height: 60vh; }
+  .side { overflow: visible; }
+}

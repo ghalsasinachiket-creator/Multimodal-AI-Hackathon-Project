@@ -27,3 +27,9 @@ NEGATIVE_TOKENS = frozenset({
     "n", "no", "0", "false", "negative", "absent", "normal",
     "none", "fmale", "female", "non-significant", "nonsignificant",
 })
+# Features deliberately left out of the models (decided by scripts/ablation.py). Empty = use everything.
+#EXCLUDED_FEATURES = frozenset({"weight", "length", "bmi"})   # change to frozenset({"weight", "length", "bmi"}) if the ablation says drop
+
+
+# Features deliberately left out of the models (decided by scripts/ablation.py). Empty = use everything.
+EXCLUDED_FEATURES = frozenset({"weight", "length", "bmi",})
