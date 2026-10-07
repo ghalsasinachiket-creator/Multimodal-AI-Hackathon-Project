@@ -11,7 +11,7 @@ const pct = (x) => Math.round(x * 100);
 function RiskCard({ title, pred, previous,assumed, selected, onSelect }) {
   const p = pred.probability;
   const delta = previous ? pct(p) - pct(previous.probability) : 0; // change in percentage points
-  
+ 
   return (
     <button type="button" className={`card${selected ? " selected" : ""}`} onClick={onSelect}>
       <div className="card-top">
@@ -139,6 +139,7 @@ export default function Results({ result, status, hasInput, features, metrics, s
           <div className="cards">
             {TARGETS.map(([id, title]) => (
               <RiskCard key={id} title={title} pred={pred.predictions[id]}
+                        assumed={expl?.explanations[id]?.assumed_share_pct}
                         selected={selected === id} onSelect={() => onSelect(selected === id ? null : id)} />
             ))}
           </div>
