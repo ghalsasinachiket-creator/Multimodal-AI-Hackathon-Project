@@ -45,7 +45,7 @@ export default function Scene({ probs, selected, onSelect, view, layers }) {
       <directionalLight position={[2, 3, 4]} intensity={1.3} />
       <directionalLight position={[-3, -1, -2]} intensity={0.4} /> {/* soft back light so the rear isn't black */}
       {layers.body && <Torso />}
-      <Heart />
+      <Heart probs={probs} tint={layers.territory} />
       <Arteries probs={probs} selected={selected} onSelect={onSelect} showLabels={layers.labels} />
       {/* drag = rotate, wheel/pinch = zoom; panning off so the heart stays centred */}
       <OrbitControls makeDefault enableDamping enablePan={false} minDistance={1.2} maxDistance={4.5} />

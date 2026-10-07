@@ -8,9 +8,10 @@ const pct = (x) => Math.round(x * 100);
 
 // One prediction: probability, a bar with the cut-off marked, and above/below status.
 // `previous` is the prediction before the user's latest edit (or null), used for the change badge.
-function RiskCard({ title, pred, previous, selected, onSelect }) {
+function RiskCard({ title, pred, previous,assumed, selected, onSelect }) {
   const p = pred.probability;
   const delta = previous ? pct(p) - pct(previous.probability) : 0; // change in percentage points
+  
   return (
     <button type="button" className={`card${selected ? " selected" : ""}`} onClick={onSelect}>
       <div className="card-top">
@@ -32,6 +33,7 @@ function RiskCard({ title, pred, previous, selected, onSelect }) {
         {/* the tick shows where THIS target's cut-off sits: they differ per target */}
         <div className="bar-tick" style={{ left: `${pct(pred.threshold)}%` }} />
       </div>
+      {assumed > 50 && <div className="card-warn"> {Math.round(assumed)}% from assumed values</div>}
       <small>
         cut-off {pct(pred.threshold)}% · {pred.model.toUpperCase()}{pred.calibrated ? " (calibrated)" : ""}
       </small>

@@ -1,6 +1,7 @@
 import { formatValue, labelOf } from "./featureGroups.js";
 
 const pct = (x) => Math.round(x * 100);
+const MIN_SHARE = 5; // a factor must account for at least 5% of the explanation to be called "main"
 
 // "a, b and c"
 const joinList = (items) =>
@@ -16,14 +17,22 @@ export function plainSummary({ title, pred, exp, features }) {
     return value ? `${labelOf(f.feature, f.label)} (${value})` : labelOf(f.feature, f.label);
   };
 
-  const raises = exp.top_features.filter((f) => f.direction === "raises").slice(0, 3);
-  const lowers = exp.top_features.filter((f) => f.direction === "lowers").slice(0, 2);
+  // Only factors with a real share are named: a feature worth 1% is noise, not a "main factor".
+  const strong = (direction) =>
+    exp.top_features.filter((f) => f.direction === direction && f.share_pct >= MIN_SHARE).slice(0, 3);
+  const raises = strong("raises");
+  const lowers = strong("lowers");
 
   const parts = [
     `${title}: ${pct(pred.probability)}%, ${pred.above_threshold ? "above" : "below"} its cut-off of ${pct(pred.threshold)}%.`,
   ];
-  if (raises.length) parts.push(`Main factors raising it: ${joinList(raises.map(describe))}.`);
-  if (lowers.length) parts.push(`Factors lowering it: ${joinList(lowers.map(describe))}.`);
+  // Lead with what explains the outcome: raising factors if it is above the cut-off, otherwise the ones keeping it low.
+  const sentences = pred.above_threshold
+    ? [[raises, "Main factors raising it"], [lowers, "Factors lowering it"]]
+    : [[lowers, "Main factors keeping it low"], [raises, "Factors pushing it up"]];
+  for (const [list, lead] of sentences) {
+    if (list.length) parts.push(`${lead}: ${joinList(list.map(describe))}.`);
+  }
   if (!raises.length && !lowers.length) parts.push("None of the entered values moved this estimate noticeably.");
   if (exp.assumed_share_pct > 50) {
     parts.push(`${exp.assumed_share_pct}% of this estimate rests on values that were not entered, so treat it with caution.`);

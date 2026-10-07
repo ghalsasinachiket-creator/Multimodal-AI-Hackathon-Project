@@ -7,10 +7,10 @@ export const HEART_CENTRE = new THREE.Vector3(0, 0, 0.02);
 // Heart chambers as tilted ellipsoids: centre, radii (x, y, z before tilting) and tilt about the z axis.
 // A positive tilt swings the lower end (the apex) towards +x, i.e. down and to the patient's left.
 export const CHAMBERS = {
-  lv: { centre: [0.1, -0.1, 0.0], radii: [0.34, 0.5, 0.3], tilt: 0.5, color: "#b5403a" }, // left ventricle
-  rv: { centre: [-0.13, -0.04, 0.17], radii: [0.27, 0.36, 0.23], tilt: 0.35, color: "#c4524b" }, // right ventricle
-  ra: { centre: [-0.36, 0.14, 0.02], radii: [0.19, 0.27, 0.19], tilt: 0.0, color: "#c85a52" }, // right atrium
-  la: { centre: [0.16, 0.26, -0.2], radii: [0.2, 0.16, 0.18], tilt: 0.0, color: "#b24a44" }, // left atrium
+  lv: { centre: [0.1, -0.1, 0.0], radii: [0.34, 0.5, 0.3], tilt: 0.5, color: "#a8706b" }, // left ventricle
+  rv: { centre: [-0.13, -0.04, 0.17], radii: [0.27, 0.36, 0.23], tilt: 0.35, color: "#b27a74" }, // right ventricle
+  ra: { centre: [-0.36, 0.14, 0.02], radii: [0.19, 0.27, 0.19], tilt: 0.0, color: "#b58079" }, // right atrium
+  la: { centre: [0.16, 0.26, -0.2], radii: [0.2, 0.16, 0.18], tilt: 0.0, color: "#a06b66" }, // left atrium
 };
 
 // Large vessels, drawn as tubes through control points (decoration only, no risk attached).

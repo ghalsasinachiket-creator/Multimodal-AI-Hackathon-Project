@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --test src/anatomy.test.js src/form.test.js src/summary.test.js src/views.test.js"
+       "test": "node --test src/anatomy.test.js src/form.test.js src/summary.test.js src/views.test.js src/territory.test.js"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

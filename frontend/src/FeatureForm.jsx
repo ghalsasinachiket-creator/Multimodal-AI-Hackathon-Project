@@ -29,7 +29,7 @@ function BinaryField({ f, value, onChange, onClear }) {
   return (
     <select id={f.name} value={value ?? ""}
             onChange={(e) => (e.target.value === "" ? onClear(f.name) : onChange(f.name, Number(e.target.value)))}>
-      <option value="">typical</option>
+      <option value="">not entered</option>
       {binaryOptions(f).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
     </select>
   );
@@ -39,7 +39,7 @@ function CategoryField({ f, value, onChange, onClear }) {
   return (
     <select id={f.name} value={value ?? ""}
             onChange={(e) => (e.target.value === "" ? onClear(f.name) : onChange(f.name, e.target.value))}>
-      <option value="">typical</option>
+      <option value="">not entered</option>
       {f.categories.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
     </select>
   );

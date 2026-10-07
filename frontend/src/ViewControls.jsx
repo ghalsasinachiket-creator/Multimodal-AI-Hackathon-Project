@@ -16,7 +16,12 @@ export default function ViewControls({ onView, layers, onLayers }) {
       </label>
       <label>
         <input type="checkbox" checked={layers.labels} onChange={(e) => onLayers({ ...layers, labels: e.target.checked })} />
-        Labels
+        Labels     
+        <label>
+        <input type="checkbox" checked={layers.territory} onChange={(e) => onLayers({ ...layers, territory: e.target.checked })} />
+        Risk shading
+      </label>
+
       </label>
     </div>
   );

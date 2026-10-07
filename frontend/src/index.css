@@ -37,6 +37,8 @@ summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
 .card-title { font-weight: 600; font-size: 13px; }
 .card-prob { font-size: 28px; font-weight: 700; margin: 4px 0; }
 .card small { color: #7d8d9c; font-size: 11px; margin-top: auto; }
+.card-warn { font-size: 11px; color: #ffd98a; margin-top: 4px; }
+
 .badge { font-size: 10px; border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
 .badge.up { background: #5b1f1f; color: #ffb4b4; }
 .badge.down { background: #1d4a2b; color: #a9e8bd; }

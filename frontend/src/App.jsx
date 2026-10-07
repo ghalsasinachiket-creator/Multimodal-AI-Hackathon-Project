@@ -13,7 +13,7 @@ export default function App() {
   const risk = useRisk();
   const [selected, setSelected] = useState(null); // "cad" | "lad" | "lcx" | "rca" | null
   const [view, setView] = useState(null);         // { name, nonce }: the latest camera button pressed
-  const [layers, setLayers] = useState({ body: true, labels: true });
+  const [layers, setLayers] = useState({ body: true, labels: true, territory: true });
 
   // Probabilities for the 3D arteries. null = no prediction yet, so the arteries stay grey.
   const probs = useMemo(() => {
