@@ -95,3 +95,9 @@ export function buildPayload(features, touched) {
   if (bmi !== undefined) payload.bmi = bmi;
   return payload;
 }
+
+// The features the models rely on most: the top `n` of every target, merged (used to mark them in the form).
+export function keyFeatureNames(importance, n = 4) {
+  if (!importance) return new Set();
+  return new Set(Object.values(importance).flatMap((list) => list.slice(0, n).map((f) => f.feature)));
+}
