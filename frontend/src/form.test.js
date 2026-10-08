@@ -66,6 +66,10 @@ describe("keyFeatureNames", () => {
   it("merges the top n of every target without duplicates", () => {
     assert.deepEqual([...keyFeatureNames(importance, 2)].sort(), ["a", "b", "d"]);
   });
+  it("ignores the weaker LCX and RCA models", () => {
+    const withWeak = { ...importance, lcx: [{ feature: "cr" }], rca: [{ feature: "esr" }] };
+    assert.deepEqual([...keyFeatureNames(withWeak, 2)].sort(), ["a", "b", "d"]);
+  });
   it("is empty when the importance data is not available", () => {
     assert.equal(keyFeatureNames(null).size, 0);
   });

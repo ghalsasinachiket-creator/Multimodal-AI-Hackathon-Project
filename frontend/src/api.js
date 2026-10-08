@@ -26,6 +26,7 @@ const post = (path, features, signal) =>
 
 export const getFeatures = () => request("/features");
 export const getMetrics = () => request("/metrics");
+export const getImportance = () => request("/importance");
 export const predict = (features, signal) => post("/predict", features, signal);
 // entered_only=true hides values we assumed; top_k=8 keeps the list short
 export const explain = (features, signal) => post("/explain?top_k=8&entered_only=true", features, signal);

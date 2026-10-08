@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { API_URL, explain, getFeatures, getMetrics, predict } from "./api.js";
+import { API_URL, explain, getFeatures, getImportance, getMetrics, predict } from "./api.js";
 import { EXAMPLE_PATIENT, buildPayload } from "./featureGroups.js";
 
 // A fetch that never reached the server throws TypeError: explain that in plain words.
@@ -12,6 +12,7 @@ const friendly = (err) =>
 export function useRisk() {
   const [features, setFeatures] = useState([]);   // form definition from GET /features
   const [metrics, setMetrics] = useState(null);   // evaluation numbers from GET /metrics
+  const [importance, setImportance] = useState(null); // which features drive each model overall, from GET /importance
   const [touched, setTouched] = useState({});     // ONLY the fields the user changed
   const [result, setResult] = useState(null);     // { predict, explain } for the current input
   const [status, setStatus] = useState({ loading: false, error: null });
@@ -20,6 +21,7 @@ export function useRisk() {
   useEffect(() => {
     getFeatures().then(setFeatures).catch((e) => setStatus({ loading: false, error: friendly(e) }));
     getMetrics().then(setMetrics).catch(() => {}); // metrics are optional: the app works without them
+    getImportance().then(setImportance).catch(() => {}); // so is the importance panel
   }, []);
 
   const payload = useMemo(() => buildPayload(features, touched), [features, touched]);
@@ -50,11 +52,12 @@ export function useRisk() {
   }, [features.length, payload, hasInput]);
 
   return {
-    features, metrics, touched, status, hasInput,
+    features, metrics, importance, touched, status, hasInput,
     result: hasInput ? result : null,               // nothing entered -> show no prediction
     setField: (name, value) => setTouched((t) => ({ ...t, [name]: value })),
     clearField: (name) => setTouched(({ [name]: _removed, ...rest }) => rest),
-    reset: () => {setTouched({}),setResult(null);},
+    // a reset or a loaded example is a NEW patient: forget the old result so no misleading change is shown
+    reset: () => { setTouched({}); setResult(null); },
     loadExample: () => { setTouched({ ...EXAMPLE_PATIENT }); setResult(null); },
   };
 }

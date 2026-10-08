@@ -46,7 +46,7 @@ function CategoryField({ f, value, onChange, onClear }) {
 }
 
 // One row of the form: label, the right kind of control, and a hint with the range seen in training.
-function Field({ f, value, bmi, setField, clearField }) {
+function Field({ f, value, bmi,isKey, setField, clearField }) {
   const unit = UNITS[f.name];
   let control;
   if (f.name === "bmi") {
@@ -63,6 +63,7 @@ function Field({ f, value, bmi, setField, clearField }) {
     <div className={`field${value !== undefined ? " entered" : ""}`}>
       <label htmlFor={f.name}>
         {labelOf(f.name, f.label)}{unit ? <span className="unit"> ({unit})</span> : null}
+        {isKey && <span className="key" title="one of the inputs the models rely on most"> ★</span>}
       </label>
       {control}
       {f.kind === "numeric" && f.name !== "bmi" && <small>seen {f.min}–{f.max}</small>}
@@ -70,7 +71,7 @@ function Field({ f, value, bmi, setField, clearField }) {
   );
 }
 
-export default function FeatureForm({ features, touched, setField, clearField, reset, loadExample }) {
+export default function FeatureForm({ features, touched, setField, clearField, reset, loadExample,keyFeatures = new Set() }) {
   const sections = useMemo(() => groupFeatures(features), [features]);
   const bmi = computeBmi(features, touched);
   const entered = Object.keys(touched).length;
@@ -91,7 +92,7 @@ export default function FeatureForm({ features, touched, setField, clearField, r
         <button type="button" onClick={onReset} disabled={entered === 0}>Reset</button>
         <span className="count">{entered} of {features.length} entered</span>
       </div>
-
+      {keyFeatures.size > 0 && <p className="hint">★ marks the inputs the models rely on most. Fill these in first.</p>}
       {features.length === 0 && <p className="hint">Loading fields…</p>}
 
       {sections.map((s, i) => {
@@ -100,7 +101,8 @@ export default function FeatureForm({ features, touched, setField, clearField, r
           <details key={s.title} open={i === 0}>
             <summary>{s.title}{inSection > 0 ? <span className="pill">{inSection}</span> : null}</summary>
             {s.items.map((f) => (
-              <Field key={`${f.name}-${version}`} f={f} value={touched[f.name]} bmi={bmi} setField={setField} clearField={clearField} />
+              <Field key={`${f.name}-${version}`} f={f} value={touched[f.name]} bmi={bmi} isKey={keyFeatures.has(f.name)}
+                     setField={setField} clearField={clearField} />
             ))}
           </details>
         );

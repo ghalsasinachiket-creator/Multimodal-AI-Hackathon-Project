@@ -95,9 +95,9 @@ export function buildPayload(features, touched) {
   if (bmi !== undefined) payload.bmi = bmi;
   return payload;
 }
-
-// The features the models rely on most: the top `n` of every target, merged (used to mark them in the form).
-export function keyFeatureNames(importance, n = 4) {
+// The features the models rely on most, used to star inputs in the form. Only the CAD and LAD models count:
+// the LCX and RCA models are weaker and lean on lab values, so starring theirs would point users at noise.
+export function keyFeatureNames(importance, n = 5, targets = ["cad", "lad"]) {
   if (!importance) return new Set();
-  return new Set(Object.values(importance).flatMap((list) => list.slice(0, n).map((f) => f.feature)));
+  return new Set(targets.flatMap((t) => (importance[t] ?? []).slice(0, n).map((f) => f.feature)));
 }
