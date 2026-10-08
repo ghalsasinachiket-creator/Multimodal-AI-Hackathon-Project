@@ -1,0 +1,250 @@
+{
+  "cad": [
+    {
+      "feature": "typical_chest_pain",
+      "label": "Typical Chest Pain",
+      "share_pct": 19.82
+    },
+    {
+      "feature": "age",
+      "label": "Age",
+      "share_pct": 9.19
+    },
+    {
+      "feature": "atypical",
+      "label": "Atypical",
+      "share_pct": 8.58
+    },
+    {
+      "feature": "region_rwma",
+      "label": "Region RWMA",
+      "share_pct": 8.23
+    },
+    {
+      "feature": "ef_tte",
+      "label": "EF-TTE",
+      "share_pct": 6.84
+    },
+    {
+      "feature": "fbs",
+      "label": "FBS",
+      "share_pct": 4.71
+    },
+    {
+      "feature": "htn",
+      "label": "HTN",
+      "share_pct": 4.68
+    },
+    {
+      "feature": "bp",
+      "label": "BP",
+      "share_pct": 4.34
+    },
+    {
+      "feature": "tg",
+      "label": "TG",
+      "share_pct": 3.61
+    },
+    {
+      "feature": "tinversion",
+      "label": "Tinversion",
+      "share_pct": 3.37
+    },
+    {
+      "feature": "dm",
+      "label": "DM",
+      "share_pct": 3.32
+    },
+    {
+      "feature": "esr",
+      "label": "ESR",
+      "share_pct": 3.07
+    }
+  ],
+  "lad": [
+    {
+      "feature": "typical_chest_pain",
+      "label": "Typical Chest Pain",
+      "share_pct": 17.29
+    },
+    {
+      "feature": "region_rwma",
+      "label": "Region RWMA",
+      "share_pct": 11.2
+    },
+    {
+      "feature": "ef_tte",
+      "label": "EF-TTE",
+      "share_pct": 9.54
+    },
+    {
+      "feature": "age",
+      "label": "Age",
+      "share_pct": 8.51
+    },
+    {
+      "feature": "atypical",
+      "label": "Atypical",
+      "share_pct": 6.84
+    },
+    {
+      "feature": "esr",
+      "label": "ESR",
+      "share_pct": 4.17
+    },
+    {
+      "feature": "lymph",
+      "label": "Lymph",
+      "share_pct": 3.29
+    },
+    {
+      "feature": "tg",
+      "label": "TG",
+      "share_pct": 3.07
+    },
+    {
+      "feature": "neut",
+      "label": "Neut",
+      "share_pct": 2.93
+    },
+    {
+      "feature": "bp",
+      "label": "BP",
+      "share_pct": 2.88
+    },
+    {
+      "feature": "fbs",
+      "label": "FBS",
+      "share_pct": 2.8
+    },
+    {
+      "feature": "tinversion",
+      "label": "Tinversion",
+      "share_pct": 2.49
+    }
+  ],
+  "lcx": [
+    {
+      "feature": "typical_chest_pain",
+      "label": "Typical Chest Pain",
+      "share_pct": 10.88
+    },
+    {
+      "feature": "age",
+      "label": "Age",
+      "share_pct": 10.45
+    },
+    {
+      "feature": "cr",
+      "label": "CR",
+      "share_pct": 7.41
+    },
+    {
+      "feature": "tg",
+      "label": "TG",
+      "share_pct": 6.82
+    },
+    {
+      "feature": "plt",
+      "label": "PLT",
+      "share_pct": 6.19
+    },
+    {
+      "feature": "na",
+      "label": "Na",
+      "share_pct": 5.33
+    },
+    {
+      "feature": "fbs",
+      "label": "FBS",
+      "share_pct": 5.0
+    },
+    {
+      "feature": "hdl",
+      "label": "HDL",
+      "share_pct": 4.67
+    },
+    {
+      "feature": "esr",
+      "label": "ESR",
+      "share_pct": 4.14
+    },
+    {
+      "feature": "sex",
+      "label": "Sex",
+      "share_pct": 4.08
+    },
+    {
+      "feature": "bun",
+      "label": "BUN",
+      "share_pct": 3.73
+    },
+    {
+      "feature": "ldl",
+      "label": "LDL",
+      "share_pct": 3.64
+    }
+  ],
+  "rca": [
+    {
+      "feature": "dm",
+      "label": "DM",
+      "share_pct": 10.47
+    },
+    {
+      "feature": "esr",
+      "label": "ESR",
+      "share_pct": 10.34
+    },
+    {
+      "feature": "typical_chest_pain",
+      "label": "Typical Chest Pain",
+      "share_pct": 10.24
+    },
+    {
+      "feature": "age",
+      "label": "Age",
+      "share_pct": 8.5
+    },
+    {
+      "feature": "neut",
+      "label": "Neut",
+      "share_pct": 6.65
+    },
+    {
+      "feature": "lymph",
+      "label": "Lymph",
+      "share_pct": 5.84
+    },
+    {
+      "feature": "tg",
+      "label": "TG",
+      "share_pct": 5.59
+    },
+    {
+      "feature": "sex",
+      "label": "Sex",
+      "share_pct": 5.59
+    },
+    {
+      "feature": "hb",
+      "label": "HB",
+      "share_pct": 4.57
+    },
+    {
+      "feature": "wbc",
+      "label": "WBC",
+      "share_pct": 3.86
+    },
+    {
+      "feature": "fbs",
+      "label": "FBS",
+      "share_pct": 2.89
+    },
+    {
+      "feature": "k",
+      "label": "K",
+      "share_pct": 2.5
+    }
+  ]
+}
