@@ -68,6 +68,13 @@ def create_app(service: RiskService | None = None) -> FastAPI:
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e))
 
+    @app.get("/importance")
+    def importance(request: Request):
+        result = svc(request).importance()
+        if result is None:
+            raise HTTPException(status_code=404, detail="No importance file. Run scripts/export_importance.py first.")
+        return result
+    
     @app.get("/metrics")
     def metrics(request: Request):
         result = svc(request).metrics()
