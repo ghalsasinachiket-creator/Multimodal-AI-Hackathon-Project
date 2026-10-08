@@ -6,6 +6,8 @@ Interactive docs (try the endpoints in the browser): http://localhost:8000/docs
 """
 from __future__ import annotations
 
+import os
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
@@ -35,11 +37,31 @@ def create_app(service: RiskService | None = None) -> FastAPI:
 
     # CORS: browsers block a page on one port (the frontend) from calling an API on another port
     # unless the API explicitly allows it. These are the usual dev-server addresses.
+    #app.add_middleware(
+     #   CORSMiddleware,
+    #    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173",
+    #                   "http://localhost:3000", "http://127.0.0.1:3000"],
+    #    allow_methods=["*"], allow_headers=["*"],
+    #)
+    allowed_origins = [
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ORIGINS",
+            ",".join([
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+            ]),
+        ).split(",")
+        if origin.strip()
+    ]
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173",
-                       "http://localhost:3000", "http://127.0.0.1:3000"],
-        allow_methods=["*"], allow_headers=["*"],
+        allow_origins=allowed_origins,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     def svc(request: Request) -> RiskService:
