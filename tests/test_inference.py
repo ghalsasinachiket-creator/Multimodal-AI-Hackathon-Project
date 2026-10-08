@@ -75,6 +75,13 @@ def test_entered_hides_assumed_values(service):
         #entered shares + assumed shares must still add up to 100%
         assert abs(sum(i["share_pct"] for i in e["top_features"]) + e["assumed_share_pct"] - 100) < 1.0
 
+def test_global_importance_is_a_share_per_clinical_feature(service):
+    for t in C.TARGETS:
+        share = service.global_importance(t)
+        assert abs(share.sum() - 100) < 1e-6
+        assert (share >= 0).all()
+        assert set(share.index) <= set(service.features) #one-hot columns were merged back
+
 
 def test_validation(service):
     with pytest.raises(ValueError):
