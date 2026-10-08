@@ -5,6 +5,8 @@ import Scene from "./Scene.jsx";
 import ViewControls from "./ViewControls.jsx";
 import { NEUTRAL_COLOR, riskColor } from "./riskColor.js";
 import { useRisk } from "./useRisk.js";
+import { keyFeatureNames } from "./featureGroups.js";
+
 
 // The legend bar is the same green -> yellow -> red scale the arteries use.
 const GRADIENT = `linear-gradient(to right, ${riskColor(0)}, ${riskColor(0.5)}, ${riskColor(1)})`;
@@ -14,6 +16,9 @@ export default function App() {
   const [selected, setSelected] = useState(null); // "cad" | "lad" | "lcx" | "rca" | null
   const [view, setView] = useState(null);         // { name, nonce }: the latest camera button pressed
   const [layers, setLayers] = useState({ body: true, labels: true, territory: true });
+  // The inputs the models rely on most (top 4 of every target), starred in the form.
+  const keyFeatures = useMemo(() => keyFeatureNames(risk.importance), [risk.importance]);
+
 
   // Probabilities for the 3D arteries. null = no prediction yet, so the arteries stay grey.
   const probs = useMemo(() => {
@@ -28,7 +33,7 @@ export default function App() {
       </div>
       <div className="main">
         <aside className="side form-panel">
-          <FeatureForm features={risk.features} touched={risk.touched} setField={risk.setField}
+          <FeatureForm features={risk.features} touched={risk.touched} setField={risk.setField} keyFeatures={keyFeatures}
                        clearField={risk.clearField} reset={risk.reset} loadExample={risk.loadExample} />
         </aside>
 
@@ -47,7 +52,7 @@ export default function App() {
 
         <aside className="side panel">
           <Results result={risk.result} status={risk.status} hasInput={risk.hasInput} features={risk.features}
-                   metrics={risk.metrics} selected={selected} onSelect={setSelected} />
+                   metrics={risk.metrics} selected={selected} importance={risk.importance} onSelect={setSelected} />
         </aside>
       </div>
     </div>
