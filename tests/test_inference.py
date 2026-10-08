@@ -114,3 +114,6 @@ def test_api_endpoints(service):
         service.report_dir.mkdir()
         (service.report_dir / "final_metrics.json").write_text(json.dumps({"cad": {"roc_auc": 0.9}}))
         assert client.get("/metrics").json()["final"]["cad"]["roc_auc"] == 0.9
+        assert client.get("/importance").status_code == 404      # the export script has not been run here
+        (service.report_dir / "global_importance.json").write_text(json.dumps({"cad": []}))
+        assert client.get("/importance").json() == {"cad": []}
