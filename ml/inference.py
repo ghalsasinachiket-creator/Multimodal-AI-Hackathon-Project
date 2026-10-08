@@ -156,20 +156,23 @@ class RiskService:
         }
 
     @staticmethod
-    def _shap_for(explainer, Xt):
-        """Return (SHAP values for the 'stenotic' class, base value) for ONE patient.
+    def _positive_class(sv):
+        """SHAP output -> a (rows, features) array for the 'stenotic' class.
 
         Different SHAP versions / models return different shapes, so normalise them here:
           list of 2 arrays       -> take class 1
           array (rows, feats, 2) -> take class 1
           array (rows, feats)    -> already class 1 (XGBoost, logistic regression)
         """
-        sv = explainer.shap_values(Xt)
         if isinstance(sv, list):
             sv = sv[1]
         sv = np.asarray(sv)
-        if sv.ndim == 3:
-            sv = sv[:, :, 1]
+        return sv[:, :, 1] if sv.ndim == 3 else sv
+
+    @staticmethod
+    def _shap_for(explainer, Xt):
+        """Return (SHAP values for the 'stenotic' class, base value) for ONE patient."""
+        sv = RiskService._positive_class(explainer.shap_values(Xt))
         ev = np.atleast_1d(explainer.expected_value)       # the base value; may be one number or one per class
         base_value = float(ev[1] if len(ev) > 1 else ev[0])
         return sv[0], base_value                           # [0] = the single patient in the batch
@@ -245,6 +248,27 @@ class RiskService:
                 item.update(categories=m["categories"], default=str(mode))
             info.append(item)
         return info
+
+    def global_importance(self, target: str) -> pd.Series:
+        """Average |SHAP| of each clinical feature over all training patients, as a percentage share.
+
+        One-hot columns are summed back into their feature BEFORE taking |.|, so all VHD columns count
+        as one feature. Shares make targets with different SHAP units (probability vs log-odds) comparable.
+        """
+        base = self.bundles[target]["base"]
+        prep = base.named_steps["prep"]
+        Xt = prep.transform(self._X_train)
+        names = list(prep.get_feature_names_out())
+        sv = self._positive_class(self.explainers[target].shap_values(Xt))
+        owners = [self._owner.get(n, n) for n in names]
+        per_feature = pd.DataFrame(sv, columns=owners).T.groupby(level=0).sum().T   # rows = patients
+        importance = per_feature.abs().mean()
+        return (100 * importance / importance.sum()).sort_values(ascending=False)
+
+    def importance(self):
+        """The global importance saved by scripts/export_importance.py (None if it has not been run)."""
+        path = self.report_dir / "global_importance.json"
+        return json.loads(path.read_text()) if path.exists() else None
 
     def metrics(self):
         """Evaluation numbers saved by train_final.py (None if the reports are missing)."""
