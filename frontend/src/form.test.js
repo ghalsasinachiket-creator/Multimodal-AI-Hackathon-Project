@@ -1,7 +1,7 @@
 // Run with:  npm test
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { binaryOptions, buildPayload, computeBmi, formatValue, groupFeatures } from "./featureGroups.js";
+import { binaryOptions, buildPayload, computeBmi, formatValue, groupFeatures,keyFeatureNames } from "./featureGroups.js";
 
 // A tiny feature list in the same shape the API's GET /features returns.
 const FEATURES = [
@@ -58,5 +58,15 @@ describe("BMI and payload", () => {
   });
   it("never lets a typed BMI through", () => {
     assert.deepEqual(buildPayload(FEATURES, { bmi: 99 }), {});
+  });
+});
+
+describe("keyFeatureNames", () => {
+  const importance = { cad: [{ feature: "a" }, { feature: "b" }, { feature: "c" }], lad: [{ feature: "b" }, { feature: "d" }] };
+  it("merges the top n of every target without duplicates", () => {
+    assert.deepEqual([...keyFeatureNames(importance, 2)].sort(), ["a", "b", "d"]);
+  });
+  it("is empty when the importance data is not available", () => {
+    assert.equal(keyFeatureNames(null).size, 0);
   });
 });
