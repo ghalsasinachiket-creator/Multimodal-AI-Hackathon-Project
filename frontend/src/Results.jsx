@@ -77,6 +77,29 @@ function Explanation({ title,pred, exp, features }) {
 }
 
 // The evaluation numbers from training (out-of-fold, so not flattered by the training data).
+// Which features drive a model OVERALL (average over all 303 training patients). The "Why?" panel above is
+// about ONE patient; this one is about the model. Bars are shares of the total, so targets compare fairly.
+function ImportancePanel({ importance, target }) {
+  const list = importance[target];
+  if (!list || list.length === 0) return null;
+  const title = TARGETS.find(([id]) => id === target)?.[1] ?? target;
+  const biggest = Math.max(...list.map((f) => f.share_pct), 1);   // scales the bars
+  return (
+    <details className="importance">
+      <summary>What drives {title} overall</summary>
+      {list.slice(0, 8).map((f) => (
+        <div className="feat" key={f.feature}>
+          <div className="feat-head"><span>{labelOf(f.feature, f.label)}</span><span>{f.share_pct}%</span></div>
+          <div className="feat-bar"><div className="feat-fill neutral" style={{ width: `${(f.share_pct / biggest) * 100}%` }} /></div>
+        </div>
+      ))}
+      <p className="hint">
+        Share of each feature in the model's decisions, averaged over all 303 patients it was trained on.
+        Select a card to switch target.
+      </p>
+    </details>
+  );
+}
 function MetricsTable({ metrics }) {
   const rows = TARGETS.filter(([id]) => metrics.final[id]);
   return (
