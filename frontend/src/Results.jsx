@@ -129,7 +129,7 @@ function MetricsTable({ metrics }) {
   );
 }
 
-export default function Results({ result, status, hasInput, features, metrics, selected, onSelect }) {
+export default function Results({ result, status, hasInput,importance, features, metrics, selected, onSelect }) {
   const pred = result?.predict;
   const expl = result?.explain;
   const selectedTitle = TARGETS.find(([id]) => id === selected)?.[1];
@@ -174,6 +174,7 @@ export default function Results({ result, status, hasInput, features, metrics, s
         </>
       )}
 
+      {importance && <ImportancePanel importance={importance} target={selected ?? "cad"} />}
       {metrics && <MetricsTable metrics={metrics} />}
     </div>
   );
