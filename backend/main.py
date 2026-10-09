@@ -61,6 +61,7 @@ def create_app(service: RiskService | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=allowed_origins,
         allow_methods=["*"],
+        
         allow_headers=["*"],
     )
 
