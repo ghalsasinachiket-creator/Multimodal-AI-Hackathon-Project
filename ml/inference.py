@@ -21,6 +21,11 @@ from .data import load_processed
 
 class RiskService:
     """Loads everything once at startup, then answers requests quickly."""
+    REFERENCE_FEATURES = [
+        "bp", "pr", "weight", "length", "bmi", "fbs", "cr", "tg", "ldl", "hdl", "ef_tte",
+        "dm", "htn", "current_smoker", "ex_smoker", "fh", "obesity", "typical_chest_pain",
+        "atypical", "nonanginal", "st_depression", "tinversion", "region_rwma", "vhd",
+    ]
 
     def __init__(self, model_dir=None, data_dir=None, report_dir=None):
         # Defaults point at the project's models/ and reports/ folders; tests pass temporary folders.
@@ -153,6 +158,83 @@ class RiskService:
             "n_inputs_filled": len(filled),
             "filled_features": [self.meta[c]["original_name"] for c in filled],
             "warnings": warnings,
+        }
+
+    def _cohort(self, X: pd.DataFrame, values: dict) -> tuple[pd.DataFrame, str, bool]:
+        all_rows = self._X_train
+        fallback = False
+        label = "All training patients"
+
+        age_given = "age" in values and pd.notna(X.at[0, "age"]) if "age" in self.features else False
+        sex_given = "sex" in values and pd.notna(X.at[0, "sex"]) if "sex" in self.features else False
+        if not (age_given and sex_given):
+            return all_rows, label, fallback
+
+        age = float(X.at[0, "age"])
+        sex = float(X.at[0, "sex"])
+        if age >= 65:
+            band_label, age_mask = "65+", all_rows["age"] >= 65
+        elif age >= 55:
+            band_label, age_mask = "55–64", (all_rows["age"] >= 55) & (all_rows["age"] <= 64)
+        elif age >= 45:
+            band_label, age_mask = "45–54", (all_rows["age"] >= 45) & (all_rows["age"] <= 54)
+        else:
+            band_label, age_mask = "30–44", (all_rows["age"] >= 30) & (all_rows["age"] <= 44)
+
+        cohort = all_rows[(all_rows["sex"] == sex) & age_mask]
+        label = f"Same sex, age {band_label}"
+        if len(cohort) >= 20:
+            return cohort, label, fallback
+
+        fallback = True
+        sex_cohort = all_rows[all_rows["sex"] == sex]
+        if len(sex_cohort) >= 20:
+            return sex_cohort, "Same sex (fallback)", fallback
+        return all_rows, "All training patients (fallback)", fallback
+
+    def reference_profile(self, values: dict) -> dict:
+        X, _, _ = self.to_frame(values)
+        cohort, cohort_label, fallback = self._cohort(X, values)
+        out = {}
+        for name in self.REFERENCE_FEATURES:
+            if name not in self.features:
+                continue
+            meta = self.meta[name]
+            series = cohort[name].dropna()
+            if series.empty:
+                continue
+            item = {"label": meta["original_name"], "kind": meta["kind"]}
+            if meta["kind"] == "numeric":
+                q25, med, q75 = np.percentile(series.astype(float), [25, 50, 75])
+                item.update(median=round(float(med), 2), q25=round(float(q25), 2), q75=round(float(q75), 2))
+                if name in values and pd.notna(X.at[0, name]):
+                    user_value = float(X.at[0, name])
+                    item["user_percentile"] = round(float((series.astype(float) <= user_value).mean() * 100), 1)
+            elif meta["kind"] == "binary":
+                item["prevalence_pct"] = round(float(series.astype(float).mean() * 100), 1)
+            else:
+                counts = series.astype(str).value_counts()
+                total = int(counts.sum())
+                categories = []
+                for cat, cnt in counts.items():
+                    categories.append({
+                        "category": cat,
+                        "count": int(cnt),
+                        "pct": round(float(cnt * 100 / total), 1),
+                    })
+                top = categories[0]
+                item.update(
+                    most_common=top["category"],
+                    categories=categories,
+                )
+            out[name] = item
+        return {
+            "group_label": cohort_label,
+            "n": int(len(cohort)),
+            "fallback_used": fallback,
+            "features": out,
+            "note": ("Compare with similar patients: descriptive statistics from the model training cohort only. "
+                     "These values are not medical advice and not clinical targets."),
         }
 
     @staticmethod

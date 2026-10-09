@@ -90,6 +90,13 @@ def create_app(service: RiskService | None = None) -> FastAPI:
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e))
 
+    @app.post("/reference-profile")
+    def reference_profile(body: PatientInput, request: Request):
+        try:
+            return svc(request).reference_profile(body.features)
+        except ValueError as e:
+            raise HTTPException(status_code=422, detail=str(e))
+
     @app.get("/importance")
     def importance(request: Request):
         result = svc(request).importance()
