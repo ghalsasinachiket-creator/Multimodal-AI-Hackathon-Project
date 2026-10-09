@@ -52,8 +52,10 @@ export default function App() {
 
         <aside className="side panel">
           <Results result={risk.result} status={risk.status} hasInput={risk.hasInput} features={risk.features}
-                   metrics={risk.metrics} selected={selected} importance={risk.importance}
-                   referenceProfile={risk.referenceProfile} onSelect={setSelected} />
+                   metrics={risk.metrics}  importance={risk.importance}
+                   referenceProfile={risk.referenceProfile} touched={risk.touched}
+                    selected={selected}
+                   onSelect={setSelected} />
         </aside>
       </div>
     </div>
