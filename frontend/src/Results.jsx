@@ -1,7 +1,7 @@
 import { formatValue, labelOf } from "./featureGroups.js";
 import { riskColor } from "./riskColor.js";
 import { plainSummary } from "./summary.js";
-import {builldReport, downloadJson} from "./exportReport.js"
+import {buildReport, downloadJson} from "./exportReport.js"
 
 const TARGETS = [["cad", "Overall CAD"], ["lad", "LAD"], ["lcx", "LCX"], ["rca", "RCA"]];
 const pct = (x) => Math.round(x * 100);
