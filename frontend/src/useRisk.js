@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { API_URL, explain, getFeatures, getImportance, getMetrics, predict } from "./api.js";
+import { API_URL, explain, getFeatures, getImportance, getMetrics, predict, referenceProfile } from "./api.js";
 import { EXAMPLE_PATIENT, buildPayload } from "./featureGroups.js";
 
 // A fetch that never reached the server throws TypeError: explain that in plain words.
@@ -15,6 +15,7 @@ export function useRisk() {
   const [importance, setImportance] = useState(null); // which features drive each model overall, from GET /importance
   const [touched, setTouched] = useState({});     // ONLY the fields the user changed
   const [result, setResult] = useState(null);     // { predict, explain } for the current input
+  const [reference, setReference] = useState(null);
   const [status, setStatus] = useState({ loading: false, error: null });
 
   // Load the form definition and the metrics once, when the page opens.
@@ -37,9 +38,14 @@ export function useRisk() {
       setStatus({ loading: true, error: null });
       try {
         // the two requests are independent, so run them side by side
-        const [p, e] = await Promise.all([predict(payload, controller.signal), explain(payload, controller.signal)]);
+        const refPromise = referenceProfile(payload, controller.signal).catch((err) => {
+          if (err.name === "AbortError") throw err;
+          return null; // keep prediction/explanation usable even if cohort data is unavailable
+        });
+        const [p, e, r] = await Promise.all([predict(payload, controller.signal), explain(payload, controller.signal), refPromise]);
         // keep the previous predictions so the cards can show "+4 points since your last change"
         setResult((prev) => ({ predict: p, explain: e, previous: prev?.predict.predictions ?? null }));
+        setReference(r);
         setStatus({ loading: false, error: null });
       } catch (err) {
         if (err.name === "AbortError") return;      // a newer request replaced this one: ignore
@@ -54,10 +60,11 @@ export function useRisk() {
   return {
     features, metrics, importance, touched, status, hasInput,
     result: hasInput ? result : null,               // nothing entered -> show no prediction
+    referenceProfile: hasInput ? reference : null,
     setField: (name, value) => setTouched((t) => ({ ...t, [name]: value })),
     clearField: (name) => setTouched(({ [name]: _removed, ...rest }) => rest),
     // a reset or a loaded example is a NEW patient: forget the old result so no misleading change is shown
-    reset: () => { setTouched({}); setResult(null); },
-    loadExample: () => { setTouched({ ...EXAMPLE_PATIENT }); setResult(null); },
+    reset: () => { setTouched({}); setResult(null); setReference(null); },
+    loadExample: () => { setTouched({ ...EXAMPLE_PATIENT }); setResult(null); setReference(null); },
   };
 }

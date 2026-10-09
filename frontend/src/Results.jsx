@@ -129,7 +129,54 @@ function MetricsTable({ metrics }) {
   );
 }
 
-export default function Results({ result, status, hasInput,importance, features, metrics, selected, onSelect }) {
+function ReferenceProfile({ referenceProfile, features }) {
+  if (!referenceProfile) return null;
+  const byName = new Map(features.map((f) => [f.name, f]));
+  const names = Object.keys(referenceProfile.features);
+  return (
+    <details className="reference-profile">
+      <summary>Compare with similar patients</summary>
+      <p className="hint">
+        {referenceProfile.group_label} · n={referenceProfile.n}
+      </p>
+      {referenceProfile.fallback_used && (
+        <div className="warn">Small subgroup; fallback cohort used for these descriptive statistics.</div>
+      )}
+      {names.map((name) => {
+        const item = referenceProfile.features[name];
+        const label = labelOf(name, item.label ?? byName.get(name)?.label);
+        if (item.kind === "numeric") {
+          return (
+            <div className="feat" key={name}>
+              <div className="feat-head">
+                <span>{label}</span>
+                <span>median {item.median} · middle 50% {item.q25}–{item.q75}</span>
+              </div>
+              {item.user_percentile !== undefined && (
+                <small className="hint">Current input percentile: {item.user_percentile}%</small>
+              )}
+            </div>
+          );
+        }
+        if (item.kind === "binary") {
+          return (
+            <div className="feat" key={name}>
+              <div className="feat-head"><span>{label}</span><span>prevalence {item.prevalence_pct}%</span></div>
+            </div>
+          );
+        }
+        return (
+          <div className="feat" key={name}>
+            <div className="feat-head"><span>{label}</span><span>most common: {item.most_common}</span></div>
+          </div>
+        );
+      })}
+      <p className="hint">{referenceProfile.note}</p>
+    </details>
+  );
+}
+
+export default function Results({ result, status, hasInput,importance, features, metrics, selected, referenceProfile, onSelect }) {
   const pred = result?.predict;
   const expl = result?.explain;
   const selectedTitle = TARGETS.find(([id]) => id === selected)?.[1];
@@ -138,10 +185,6 @@ export default function Results({ result, status, hasInput,importance, features,
     <div>
       <h1>Results {status.loading && <span className="updating">updating…</span>}</h1>
       {status.error && <div className="error">{status.error}</div>}
-      {!hasInput && !status.error && (
-        <p className="hint">Enter patient data on the left, or press “Load example”, to see predictions.</p>
-        
-      )}
       {!hasInput && !status.error && (
         <p className="hint">Enter patient data on the left, or press “Load example”, to see predictions.</p>
       )}
@@ -159,6 +202,7 @@ export default function Results({ result, status, hasInput,importance, features,
             )}
           </p>
           {pred.warnings.map((w) => <div className="warn" key={w}>{w}</div>)}
+          <ReferenceProfile referenceProfile={referenceProfile} features={features} />
           <div className="cards">
             {TARGETS.map(([id, title]) => (
               <RiskCard key={id} title={title} pred={pred.predictions[id]}

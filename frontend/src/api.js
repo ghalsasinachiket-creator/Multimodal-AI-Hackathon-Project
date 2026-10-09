@@ -30,3 +30,4 @@ export const getImportance = () => request("/importance");
 export const predict = (features, signal) => post("/predict", features, signal);
 // entered_only=true hides values we assumed; top_k=8 keeps the list short
 export const explain = (features, signal) => post("/explain?top_k=8&entered_only=true", features, signal);
+export const referenceProfile = (features, signal) => post("/reference-profile", features, signal);

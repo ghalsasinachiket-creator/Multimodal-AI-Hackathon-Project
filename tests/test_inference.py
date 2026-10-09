@@ -97,6 +97,46 @@ def test_validation(service):
     X, _, filled = service.to_frame({"vhd": None})               # missing text field must still work
     assert "vhd" in filled and service.predict({"vhd": None})
 
+def test_reference_profile_stats_and_fallbacks(service):
+    original = service._X_train.copy(deep=True)
+    try:
+        cohort = original.copy(deep=True)
+        # same sex total >= 20, but the same sex + age-band subgroup is tiny
+        cohort["sex"] = 0.0
+        cohort.loc[:89, "sex"] = 1.0
+        cohort["age"] = 58.0
+        cohort.loc[:9, "age"] = 40.0
+        cohort["bp"] = np.linspace(100, 220, len(cohort))
+        cohort["dm"] = 0.0
+        cohort.loc[:59, "dm"] = 1.0
+        cohort["vhd"] = "N"
+        cohort.loc[:79, "vhd"] = "mild"
+        service._X_train = cohort
+
+        r = service.reference_profile({"age": 40, "sex": 1, "bp": 140})
+        assert r["fallback_used"] is True and r["group_label"] == "Same sex (fallback)"
+        assert r["n"] == 90
+        assert r["features"]["bp"]["median"] > 0
+        assert 0 <= r["features"]["bp"]["user_percentile"] <= 100
+        assert r["features"]["dm"]["prevalence_pct"] == round(60 / 90 * 100, 1)
+        assert r["features"]["vhd"]["most_common"] == "mild"
+
+        # same sex total < 20 -> full cohort fallback
+        cohort["sex"] = 0.0
+        cohort.loc[:9, "sex"] = 1.0
+        service._X_train = cohort
+        r2 = service.reference_profile({"age": 40, "sex": 1, "bp": 140})
+        assert r2["fallback_used"] is True and r2["group_label"] == "All training patients (fallback)"
+        assert r2["n"] == len(cohort)
+    finally:
+        service._X_train = original
+
+def test_reference_profile_validation(service):
+    with pytest.raises(ValueError):
+        service.reference_profile({"age": "abc"})
+    with pytest.raises(ValueError):
+        service.reference_profile({"sex": 9})
+
 
 def test_api_endpoints(service):
     with TestClient(create_app(service)) as client:              # "with" runs the startup code
@@ -110,6 +150,10 @@ def test_api_endpoints(service):
         r = client.post("/explain?top_k=50&entered_only=true", json=body).json()
         assert {i["feature"] for i in r["explanations"]["lad"]["top_features"]} <= {"age", "sex", "bp"}
         assert client.post("/predict", json={"features": {"sex": 5}}).status_code == 422
+        ref = client.post("/reference-profile", json=body)
+        assert ref.status_code == 200 and "group_label" in ref.json()
+        bad_ref = client.post("/reference-profile", json={"features": {"age": "oops"}})
+        assert bad_ref.status_code == 422
         assert client.get("/metrics").status_code == 404         # no reports in the temp folder yet
         service.report_dir.mkdir()
         (service.report_dir / "final_metrics.json").write_text(json.dumps({"cad": {"roc_auc": 0.9}}))

@@ -68,6 +68,7 @@ summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
 .error { background: #5b1f1f; color: #ffb4b4; border-radius: 6px; padding: 8px; font-size: 13px; margin: 6px 0; }
 .metrics table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
 .metrics th, .metrics td { text-align: left; padding: 3px 4px; border-bottom: 1px solid #243142; }
+.reference-profile { margin: 10px 0; }
 
 /* ---- 3D viewer overlays ---- */
 .legend-overlay { position: absolute; left: 14px; bottom: 14px; width: 190px; font-size: 11px; color: #9fb0c0; pointer-events: none; }
