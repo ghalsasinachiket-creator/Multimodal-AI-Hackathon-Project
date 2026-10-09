@@ -1,7 +1,7 @@
 import { formatValue, labelOf } from "./featureGroups.js";
 import { riskColor } from "./riskColor.js";
 import { plainSummary } from "./summary.js";
-
+import {builldReport, downloadJson} from "./exportReport.js"
 
 const TARGETS = [["cad", "Overall CAD"], ["lad", "LAD"], ["lcx", "LCX"], ["rca", "RCA"]];
 const pct = (x) => Math.round(x * 100);
@@ -212,6 +212,45 @@ function ReferenceProfile({ referenceProfile, features }) {
     </details>
   );
 }
+
+function ExportActions({
+  result,
+  referenceProfile,
+  touched,
+  features,
+  selected,
+  metrics,
+}) {
+  if (!result?.predict) return null;
+
+  const report = buildReport({
+    result,
+    referenceProfile,
+    touched,
+    features,
+    selected,
+    metrics,
+  });
+
+  return (
+    <div className="export-actions">
+      <button
+        type="button"
+        onClick={() => downloadJson(report)}
+      >
+        Download JSON
+      </button>
+
+      <button
+        type="button"
+        onClick={() => window.print()}
+      >
+        Print / Save PDF
+      </button>
+    </div>
+  );
+}
+
 
 export default function Results({ result, status, hasInput,importance, features, metrics, selected, referenceProfile, onSelect }) {
   const pred = result?.predict;
