@@ -41,6 +41,43 @@ function RiskCard({ title, pred, previous,assumed, selected, onSelect }) {
   );
 }
 
+function InputCoverageNotice({ pred, featureCount }) {
+  if (!pred || !featureCount) return null;
+
+  const assumedCount = pred.filled_features.length;
+  const enteredCount = featureCount - assumedCount;
+  const assumedPct = Math.round((assumedCount / featureCount) * 100);
+
+  if (assumedPct < 30) return null;
+
+  const prominent = assumedPct > 50;
+
+  return (
+    <div className={`coverage-notice${prominent ? " prominent" : ""}`}>
+      <strong>
+        {prominent ? "Limited input coverage" : "Some input values are assumed"}
+      </strong>
+
+      <p>
+        {enteredCount} of {featureCount} fields were entered.
+        {" "}
+        {assumedCount} field{assumedCount === 1 ? "" : "s"} use
+        typical values from the training cohort.
+      </p>
+
+      <p>
+        These are model estimates, not diagnoses, and may change when additional
+        patient information is provided.
+      </p>
+
+      <small>
+        The percentage shown in individual explanations describes the share of
+        the model explanation coming from assumed values. It is not a confidence
+        or error estimate.
+      </small>
+    </div>
+  );
+}
 
 // Why this target got its probability: the entered features, ranked by share of the explanation.
 function Explanation({ title,pred, exp, features }) {
@@ -52,8 +89,8 @@ function Explanation({ title,pred, exp, features }) {
       <h2>Why {title}?</h2>
       <p className="summary">{plainSummary({ title, pred, exp, features })}</p>
       <div className={`assumed${assumed > 50 ? " high" : ""}`}>
-        {assumed}% of this estimate rests on values that were not entered
-        {assumed > 50 ? ": interpret with caution" : ""}
+        {assumed}% of this explanation comes from assumed values.
+        {assumed > 50 ? " Interpret this estimate with particular caution." : ""}
       </div>
       {exp.top_features.length === 0 && <p className="hint">None of the entered fields influenced this estimate.</p>}
       {exp.top_features.map((f) => (
@@ -180,7 +217,7 @@ export default function Results({ result, status, hasInput,importance, features,
   const pred = result?.predict;
   const expl = result?.explain;
   const selectedTitle = TARGETS.find(([id]) => id === selected)?.[1];
-
+ 
   return (
     <div>
       <h1>Results {status.loading && <span className="updating">updating…</span>}</h1>
@@ -202,6 +239,7 @@ export default function Results({ result, status, hasInput,importance, features,
             )}
           </p>
           {pred.warnings.map((w) => <div className="warn" key={w}>{w}</div>)}
+          <InputCoverageNotice pred={pred} featureCount={features.length} />
           <ReferenceProfile referenceProfile={referenceProfile} features={features} />
           <div className="cards">
             {TARGETS.map(([id, title]) => (
