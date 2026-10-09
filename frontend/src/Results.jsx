@@ -252,7 +252,7 @@ function ExportActions({
 }
 
 
-export default function Results({ result, status, hasInput,importance, features, metrics, selected, referenceProfile, onSelect }) {
+export default function Results({ result, status, hasInput,importance, features, metrics, selected, referenceProfile,touched, onSelect }) {
   const pred = result?.predict;
   const expl = result?.explain;
   const selectedTitle = TARGETS.find(([id]) => id === selected)?.[1];
@@ -260,6 +260,15 @@ export default function Results({ result, status, hasInput,importance, features,
   return (
     <div>
       <h1>Results {status.loading && <span className="updating">updating…</span>}</h1>
+
+      <ExportActions
+      result={result}
+      referenceProfile={referenceProfile}
+      touched={touched}
+      features={features}
+      selected={selected}
+      metrics={metrics}
+     />
       {status.error && <div className="error">{status.error}</div>}
       {!hasInput && !status.error && (
         <p className="hint">Enter patient data on the left, or press “Load example”, to see predictions.</p>
