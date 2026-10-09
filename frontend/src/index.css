@@ -34,6 +34,27 @@ summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
 .field.entered input, .field.entered select { border-color: #2f6fed; }
 .field input[readOnly] { color: #9fb0c0; }
 
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 10px;
+}
+
+.export-actions button {
+  background: #243142;
+  color: #e6edf3;
+  border: 1px solid #34465c;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.export-actions button:hover {
+  border-color: #6f91b8;
+}
+
 /* ---- results ---- */
 .cards { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 10px; margin: 10px 0; }
 .card { display: flex; flex-direction: column; text-align: left; background: #1d2733; color: inherit; border: 2px solid transparent; border-radius: 10px; padding: 10px; cursor: pointer; }
@@ -98,4 +119,72 @@ summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
   .main { display: block; }
   .viewer { height: 60vh; }
   .side { overflow: visible; }
+}
+
+@media print {
+  html,
+  body,
+  #root {
+    height: auto;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  .disclaimer {
+    background: #fff;
+    color: #111;
+    border: 1px solid #777;
+  }
+
+  .main {
+    display: block;
+  }
+
+  .form-panel,
+  .viewer,
+  .export-actions,
+  .view-controls,
+  .legend-overlay {
+    display: none !important;
+  }
+
+  .panel {
+    display: block;
+    padding: 20px;
+    background: #fff;
+    color: #111;
+    overflow: visible;
+  }
+
+  .panel .hint,
+  .panel small {
+    color: #333;
+  }
+
+  .panel details {
+    break-inside: avoid;
+  }
+
+  .card {
+    background: #fff;
+    color: #111;
+    border: 1px solid #999;
+  }
+
+  .summary,
+  .coverage-notice,
+  .assumed,
+  .warn {
+    color: #111;
+    background: #f4f4f4;
+    border: 1px solid #999;
+  }
+
+  .feat-bar,
+  .bar {
+    background: #ddd;
+  }
 }
