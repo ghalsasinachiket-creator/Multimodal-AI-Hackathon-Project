@@ -1,17 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { VESSELS, buildArteryCurve } from "./anatomy.js";
 import { NEUTRAL_COLOR,riskColor } from "./riskColor.js";
+import { buildLabelSamples, pickLabelAnchor } from "./arteryLabels.js";
 
 function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
   const [hovered, setHovered] = useState(false);
   const material = useRef();
+  const labelGroup = useRef();
+  const { camera } = useThree();
 
   // The path on the heart surface is expensive to compute, so do it once.
   const curve = useMemo(() => buildArteryCurve(vessel.points), [vessel]);
-  const labelPosition = useMemo(() => curve.getPoint(0.3), [curve]);
+  const labelSamples = useMemo(() => buildLabelSamples(curve), [curve]);
+  const labelPosition = useMemo(() => pickLabelAnchor(labelSamples, camera.position), [camera.position, labelSamples]);
+  const labelTarget = useMemo(() => new THREE.Vector3(), []);
 
   // The colour we want right now, recomputed only when the probability changes.
   //const target = useMemo(() => new THREE.Color(riskColor(prob)), [prob]);
@@ -23,6 +28,10 @@ function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
     if (!m) return;
     m.color.lerp(target, 0.12);
     m.emissive.copy(m.color); // let the artery glow in its own colour
+
+    if (!showLabels || !labelGroup.current) return;
+    pickLabelAnchor(labelSamples, camera.position, labelTarget);
+    labelGroup.current.position.lerp(labelTarget, 0.2);
   });
 
   // Show a pointer cursor while hovering; always restore it when we stop or unmount.
@@ -46,9 +55,11 @@ function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
         <meshStandardMaterial ref={material} color="#888888" emissiveIntensity={selected ? 0.6 : 0.12} roughness={0.35} />
       </mesh>
       {showLabels && (
-        <Html position={labelPosition} center distanceFactor={4} style={{ pointerEvents: "none" }}>
-          <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
-        </Html>
+        <group ref={labelGroup} position={labelPosition}>
+          <Html center distanceFactor={4} transform sprite occlude="blending" style={{ pointerEvents: "none" }}>
+            <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
+          </Html>
+        </group>
       )}
     </group>
   );
