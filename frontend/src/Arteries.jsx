@@ -1,9 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { VESSELS, buildArteryCurve } from "./anatomy.js";
+import { arteryLabelAnchor } from "./arteryLabels.js";
 import { NEUTRAL_COLOR,riskColor } from "./riskColor.js";
+
+function ArteryLabel({ id, curve, vessel, selected }) {
+  const anchor = useRef();
+  const { camera } = useThree();
+
+  useFrame(() => {
+    anchor.current?.position.copy(arteryLabelAnchor(id, curve, camera.position));
+  });
+
+  const initialPosition = useMemo(() => arteryLabelAnchor(id, curve), [id, curve]);
+
+  return (
+    <group ref={anchor} position={initialPosition}>
+      <Html
+        center
+        distanceFactor={4}
+        occlude={false}
+        zIndexRange={[100000, 0]}
+        style={{ pointerEvents: "none" }}
+      >
+        <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
+      </Html>
+    </group>
+  );
+}
 
 function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
   const [hovered, setHovered] = useState(false);
@@ -11,7 +37,6 @@ function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
 
   // The path on the heart surface is expensive to compute, so do it once.
   const curve = useMemo(() => buildArteryCurve(vessel.points), [vessel]);
-  const labelPosition = useMemo(() => curve.getPoint(0.3), [curve]);
 
   // The colour we want right now, recomputed only when the probability changes.
   //const target = useMemo(() => new THREE.Color(riskColor(prob)), [prob]);
@@ -45,11 +70,7 @@ function Artery({ id, vessel, prob, selected, onSelect,showLabels }) {
         {/* A constant starting colour: the useFrame fade above then animates it to the risk colour. */}
         <meshStandardMaterial ref={material} color="#888888" emissiveIntensity={selected ? 0.6 : 0.12} roughness={0.35} />
       </mesh>
-      {showLabels && (
-        <Html position={labelPosition} center distanceFactor={4} style={{ pointerEvents: "none" }}>
-          <div className={`vessel-label${selected ? " selected" : ""}`}>{vessel.name}</div>
-        </Html>
-      )}
+      {showLabels && <ArteryLabel id={id} curve={curve} vessel={vessel} selected={selected} />}
     </group>
   );
 }

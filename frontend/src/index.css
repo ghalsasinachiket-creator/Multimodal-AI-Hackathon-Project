@@ -97,7 +97,7 @@ summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
 .legend-labels { display: flex; justify-content: space-between; margin-top: 3px; }
 .legend-none { margin-top: 6px; display: flex; align-items: center; gap: 6px; }
 .legend-none i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.vessel-label { padding: 1px 6px; border-radius: 4px; background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.vessel-label { position: relative; z-index: 10; padding: 1px 6px; border-radius: 4px; background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .vessel-label.selected { background: #fff; color: #000; }
 
 /* ---- change badge and plain-language summary ---- */

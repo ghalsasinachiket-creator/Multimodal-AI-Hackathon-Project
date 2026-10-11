@@ -3,7 +3,9 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "three";
 import { CHAMBERS, HEART_CENTRE, VESSELS, buildArteryCurve, insideHeart, snapToHull } from "./anatomy.js";
+import { arteryLabelAnchor } from "./arteryLabels.js";
 import { riskColor } from "./riskColor.js";
+import { VIEWS } from "./views.js";
 
 describe("riskColor", () => {
   it("runs from green (0) through yellow to red (1)", () => {
@@ -45,4 +47,31 @@ describe("coronary arteries", () => {
       }
     });
   }
+});
+
+describe("coronary artery labels", () => {
+  for (const [id, v] of Object.entries(VESSELS)) {
+    it(`${id.toUpperCase()} has a valid label anchor for every camera view`, () => {
+      const curve = buildArteryCurve(v.points);
+      for (const view of Object.values(VIEWS)) {
+        const anchor = arteryLabelAnchor(id, curve, new THREE.Vector3(...view.position));
+        assert.equal(Number.isFinite(anchor.x), true);
+        assert.equal(Number.isFinite(anchor.y), true);
+        assert.equal(Number.isFinite(anchor.z), true);
+        assert.equal(insideHeart(anchor), false, "label anchor should sit outside the heart");
+        assert.ok(anchor.distanceTo(HEART_CENTRE) > 0.2, "label anchor is too close to the heart centre");
+      }
+    });
+  }
+
+  it("places the LAD label on a front-visible outside anchor", () => {
+    const curve = buildArteryCurve(VESSELS.lad.points);
+    const anchor = arteryLabelAnchor("lad", curve, new THREE.Vector3(...VIEWS.front.position));
+    const outward = anchor.clone().sub(HEART_CENTRE).normalize();
+    const toCamera = new THREE.Vector3(...VIEWS.front.position).sub(anchor).normalize();
+
+    assert.equal(insideHeart(anchor), false);
+    assert.ok(outward.dot(toCamera) > 0.6, "LAD anchor should face the front camera");
+    assert.ok(anchor.z > 0.32, "LAD anchor should be lifted in front of the heart surface");
+  });
 });
